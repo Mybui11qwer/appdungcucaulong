@@ -1,12 +1,12 @@
-import '../entity/customer_entity.dart';
+import '../../domain/entity/customer_entity.dart';
 import '../repository/customer_repository.dart';
 
-class GetCustomerUsecase {
-  final CustomerRepository repository;
+class LoginUseCase {
+  final LoginRepository repository;
 
-  GetCustomerUsecase(this.repository);
+  LoginUseCase(this.repository);
 
-  Future<List<CustomerEntity>> call() {
-    return repository.getCustomer();
+  Future<Auth> call(String email, String password) {
+    return repository.login(email, password);
   }
 }

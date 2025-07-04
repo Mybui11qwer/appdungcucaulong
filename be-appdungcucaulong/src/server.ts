@@ -1,7 +1,6 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./configs/swagger";
-import productRoutes from "./routes/product.route";
 import loginRoutes from "./routes/login.route"
 import TYPES from "./configs/types";
 import Database from "./configs/db"; 
@@ -28,8 +27,7 @@ app.get("/", (req, res) => {
 });
 
 // Các routes khác
-app.use("/api/products", productRoutes);
-app.use("/api", loginRoutes);
+app.use("/api/login", loginRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

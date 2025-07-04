@@ -90,7 +90,7 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: ["./src/routes/*.ts"], // quét tất cả routes có comment swagger
+    apis: ["./src/routes/login.route.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

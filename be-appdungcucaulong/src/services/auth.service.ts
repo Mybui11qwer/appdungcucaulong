@@ -1,35 +1,37 @@
-import { inject, injectable } from "inversify";
-import sql from "mssql";
-import TYPES from "../configs/types";
-import Database from "../configs/db";
-import { LoginDTO } from "../dto/request/login.dto";
-import { Customer } from "../interfaces/models/customer.interface";
+// src/services/auth.service.ts
+import { injectable } from "inversify";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { AuthRepository } from "../repositories/auth.repository";
+import { IAuthService } from "../interfaces/services/auth.services";
+import { LoginResponseDto } from "../dto/respone/login.respone.dto";
+import { comparePassword } from "../utils/password.util";
+
 
 @injectable()
 export class AuthService {
-  constructor(
-    @inject(TYPES.Database) private readonly db: Database
-  ) {}
+    private authRepo = new AuthRepository();
+    
+    async login(email: string, password: string): Promise<LoginResponseDto> {
+        const user = await this.authRepo.findByEmail(email);
+        if (!user) throw new Error("Tài khoản không tồn tại");
 
-  public async login({ email, password }: LoginDTO): Promise<Customer | null> {
-    await this.db.connect();
-    const pool = this.db.getPool();
+        const match = await comparePassword(password, user.Password);
+        if (!match) throw new Error("Sai mật khẩu");
 
-    const result = await pool
-      .request()
-      .input("Email", sql.NVarChar(100), email)
-      .query("SELECT TOP 1 * FROM Customer WHERE Email = @Email");
+        const token = jwt.sign(
+            { email: user.Email },
+            process.env.JWT_SECRET || "SECRET_KEY",
+            { expiresIn: "1d" }
+        );
 
-    const user = result.recordset[0];
-    if (!user || user.Password !== password) return null;
+        return new LoginResponseDto(token, {
+            Email: user.Email,
+            Username: user.Username
+        });
+    }
 
-    return {
-      ID_Customer: user.ID_Customer,
-      Username: user.Username,
-      Email: user.Email,
-      Password: user.Password,
-      Role: user.Role,
-      Avatar: user.Avatar,
-    };
-  }
+    async register(email: string, password: string, username: string, gender: string, phone: number) {
+        await this.authRepo.createUser(email, password, username, gender, phone);
+    }
 }

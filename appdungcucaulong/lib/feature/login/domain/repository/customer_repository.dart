@@ -1,5 +1,5 @@
-import '../entity/customer_entity.dart';
+import '../../domain/entity/customer_entity.dart';
 
-abstract class CustomerRepository {
-  Future<List<CustomerEntity>> getCustomer();
+abstract class LoginRepository {
+  Future<Auth> login(String email, String password);
 }
