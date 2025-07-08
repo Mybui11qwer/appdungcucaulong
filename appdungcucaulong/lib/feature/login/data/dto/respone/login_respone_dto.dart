@@ -6,7 +6,7 @@ class LoginResponseDto {
 
   factory LoginResponseDto.fromJson(Map<String, dynamic> json) =>
       LoginResponseDto(
-        token: json['token'],
-        email: json['taiKhoan']['email'],
+        token: json['token'] ?? '',
+        email: json['user']?['Email'] ?? '',
       );
 }

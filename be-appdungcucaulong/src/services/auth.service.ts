@@ -1,37 +1,36 @@
-// src/services/auth.service.ts
-import { injectable } from "inversify";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { AuthRepository } from "../repositories/auth.repository";
-import { IAuthService } from "../interfaces/services/auth.services";
+import { LoginCustomerDto } from "../dto/request/khachhang/login.customer.dto";
+import { RegisterCustomerDto } from "../dto/request/khachhang/register.customer.dto";
 import { LoginResponseDto } from "../dto/respone/login.respone.dto";
-import { comparePassword } from "../utils/password.util";
+import { IAuthService } from "../interfaces/services/auth.services";
+import { CustomerRepository } from "../repositories/auth.repository";
+import { hashPassword, comparePassword } from "../utils/password.util";
+import jwt from "jsonwebtoken";
 
+export class AuthService implements IAuthService {
+  constructor(private customerRepo: CustomerRepository) {}
 
-@injectable()
-export class AuthService {
-    private authRepo = new AuthRepository();
-    
-    async login(email: string, password: string): Promise<LoginResponseDto> {
-        const user = await this.authRepo.findByEmail(email);
-        if (!user) throw new Error("Tài khoản không tồn tại");
+  async register(data: RegisterCustomerDto): Promise<any> {
+    const hashed = await hashPassword(data.password);
+    return this.customerRepo.createCustomer({ ...data, Password: hashed });
+  }
 
-        const match = await comparePassword(password, user.Password);
-        if (!match) throw new Error("Sai mật khẩu");
+  async login(data: LoginCustomerDto): Promise<LoginResponseDto> {
+    const user = await this.customerRepo.findByEmail(data.email);
+    if (!user) throw new Error("Email not found");
+    const valid = await comparePassword(data.password, user.Password);
+    if (!valid) throw new Error("Invalid password");
 
-        const token = jwt.sign(
-            { email: user.Email },
-            process.env.JWT_SECRET || "SECRET_KEY",
-            { expiresIn: "1d" }
-        );
+    const token = jwt.sign({ id: user.ID_Customer }, process.env.JWT_SECRET!, { expiresIn: "7d" });
 
-        return new LoginResponseDto(token, {
-            Email: user.Email,
-            Username: user.Username
-        });
-    }
-
-    async register(email: string, password: string, username: string, gender: string, phone: number) {
-        await this.authRepo.createUser(email, password, username, gender, phone);
-    }
+    return {
+      token,
+      user: {
+        ID_Customer: user.ID_Customer,
+        Username: user.Username,
+        Email: user.Email,
+        Phone: user.Phone,
+        Role: user.Role,
+      },
+    };
+  }
 }

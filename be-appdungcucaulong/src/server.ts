@@ -1,36 +1,33 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./configs/swagger";
-import loginRoutes from "./routes/login.route"
-import TYPES from "./configs/types";
-import Database from "./configs/db"; 
+import loginRoutes from "./routes/login.route";
+import Database from "./configs/db";
+import productRoute from "./routes/product.route";
 
 const app = express();
 const db = new Database();
 
-(async () => {
-    try {
-        await db.connect(); // 🔥 Gọi kết nối tại đây
-        // Nếu không lỗi => đã kết nối OK
-    } catch (err) {
-        console.error("❌ Kết nối database thất bại:", err);
-    }
-})();
-
 app.use(express.json());
 
-// Route Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => {
   res.send("🎉 API Cầu Lông đang chạy!");
 });
 
-// Các routes khác
-app.use("/api/login", loginRoutes);
+app.use("/api", loginRoutes);
+app.use("/api/products", productRoute);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
-    console.log(`📚 Swagger docs: http://localhost:${PORT}/api-docs`);
-});
+
+Database.getInstance()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running at http://localhost:${PORT}`);
+      console.log(`📚 Swagger docs at http://localhost:${PORT}/api-docs`);
+    });
+  })
+  .catch((err: any) => {
+    console.error("❌ Lỗi kết nối DB:", err);
+  });

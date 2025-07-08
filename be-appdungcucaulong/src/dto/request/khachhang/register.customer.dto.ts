@@ -1,7 +1,6 @@
-export class RegisterRequestDto {
-    email?: string;
-    password?: string;
-    username?: string;    
-    phone?: number;
-    gender?: string;
+export interface RegisterCustomerDto {
+  username: string;
+  email: string;
+  phone: string;
+  password: string;
 }

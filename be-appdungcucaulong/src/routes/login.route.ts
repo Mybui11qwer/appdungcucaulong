@@ -1,20 +1,20 @@
-// routes/auth.route.ts
 import { Router } from "express";
-import container from "../configs/inversify.config";
-import TYPES from "../configs/types";
-import { AuthController } from "../controllers/auth.controller";
+import { AuthController } from "../controllers/Auth.Controller";
+import { CustomerRepository } from "../repositories/auth.repository";
+import { AuthService } from "../services/auth.service";
+
+const customerRepo = new CustomerRepository();
+const authService = new AuthService(customerRepo);
+const authController = new AuthController(authService);
 
 const router = Router();
 
-const authController = container.get<AuthController>(TYPES.AuthController);
-
 /**
  * @swagger
- * /login:
+ * /api/register:
  *   post:
- *     summary: Đăng nhập
- *     tags:
- *       - Auth
+ *     summary: Đăng ký khách hàng mới
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -22,9 +22,38 @@ const authController = container.get<AuthController>(TYPES.AuthController);
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               Username:
  *                 type: string
- *               password:
+ *               Email:
+ *                 type: string
+ *               Phone:
+ *                 type: string
+ *               Password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Lỗi đầu vào
+ */
+router.post("/register", (req, res) => authController.register(req, res));
+
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Đăng nhập tài khoản khách hàng
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               Email:
+ *                 type: string
+ *               Password:
  *                 type: string
  *     responses:
  *       200:
@@ -32,34 +61,6 @@ const authController = container.get<AuthController>(TYPES.AuthController);
  *       401:
  *         description: Sai thông tin đăng nhập
  */
-
-/**
- * @swagger
- * /login/register:
- *   post:
- *     summary: Đăng ký tài khoản
- *     tags:
- *       - Auth
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               hoTen:
- *                 type: string
- *     responses:
- *       201:
- *         description: Đăng ký thành công
- *       400:
- *         description: Dữ liệu không hợp lệ
- */
-router.post("/", authController.login);
-router.post("/register", authController.register);
+router.post("/login", (req, res) => authController.login(req, res));
 
 export default router;

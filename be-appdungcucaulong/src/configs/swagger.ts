@@ -83,14 +83,14 @@ const swaggerOptions = {
                     description: "Nhập token JWT (Bearer + token)"
                 }
             }
-        },
+        },  
         security: [
             {
                 bearerAuth: []
             }
         ]
     },
-    apis: ["./src/routes/login.route.ts"],
+    apis: ["./src/routes/*.route.ts"],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

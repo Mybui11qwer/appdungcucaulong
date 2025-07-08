@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'feature/login/domain/di/login_injection.dart';
-import 'feature/login/presentation/page/login_page.dart';
+import 'splash_wrapper.dart';
 
 void main() {
-  // Khởi tạo dependency injection cho module login
+  // Init DI
   initLoginFeature();
-  runApp(const BadmintonLoginApp());
+  runApp(const BadmintonApp());
 }
 
-class BadmintonLoginApp extends StatelessWidget {
-  const BadmintonLoginApp({super.key});
+class BadmintonApp extends StatelessWidget {
+  const BadmintonApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class BadmintonLoginApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: const SplashWrapper(),
     );
   }
 }

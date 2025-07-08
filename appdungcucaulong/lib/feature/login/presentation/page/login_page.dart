@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../product/domain/di/product_injection.dart';
+import '../../../product/presentation/bloc/product_event.dart';
+import '../../../product/presentation/page/product_page.dart';
 import '../bloc/login_bloc.dart';
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
@@ -27,7 +30,17 @@ class LoginPage extends StatelessWidget {
             } else if (state is LoginSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('✅ Đăng nhập thành công')));
-              // TODO: Chuyển hướng sang màn hình chính
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder:
+                      (_) => BlocProvider(
+                        create:
+                            (_) =>
+                                injectProductBloc()..add(LoadProductsEvent()),
+                        child: const ProductPage(),
+                      ),
+                ),
+              );
             }
           },
           child: Padding(

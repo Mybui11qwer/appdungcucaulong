@@ -1,11 +1,10 @@
-import { ICustomerModel } from "../../interfaces/models/customer.model";
-
-export class LoginResponseDto {
+export interface LoginResponseDto {
   token: string;
-  taiKhoan: Partial<ICustomerModel>;
-
-  constructor(token: string, taiKhoan: Partial<ICustomerModel>) {
-    this.token = token;
-    this.taiKhoan = taiKhoan;
-  }
+  user: {
+    ID_Customer: number;
+    Username: string;
+    Email: string;
+    Phone: string;
+    Role: string;
+  };
 }
