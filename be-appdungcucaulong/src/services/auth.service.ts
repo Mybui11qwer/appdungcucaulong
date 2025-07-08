@@ -9,9 +9,31 @@ import jwt from "jsonwebtoken";
 export class AuthService implements IAuthService {
   constructor(private customerRepo: CustomerRepository) {}
 
-  async register(data: RegisterCustomerDto): Promise<any> {
-    const hashed = await hashPassword(data.password);
-    return this.customerRepo.createCustomer({ ...data, Password: hashed });
+  async register(dto: RegisterCustomerDto) {
+    // Hash password
+    if (!dto.password) {
+      throw new Error("Password is required");
+    }
+    const passwordHash = await hashPassword(dto.password);
+
+    // Gọi repository để lưu vào DB
+    const newCustomer = await this.customerRepo.createCustomer({
+      Username: dto.username,
+      Email: dto.email,
+      Phone: dto.phone,
+      Password: passwordHash,
+      Role: 'customer', // default role
+      Address: undefined,
+      Gender: undefined,
+      Avatar: undefined,
+    });
+
+    // Có thể trả về thông tin (bỏ password)
+    return {
+      id: newCustomer.ID,
+      username: newCustomer.Username,
+      email: newCustomer.Email,
+    };
   }
 
   async login(data: LoginCustomerDto): Promise<LoginResponseDto> {
@@ -29,7 +51,7 @@ export class AuthService implements IAuthService {
         Username: user.Username,
         Email: user.Email,
         Phone: user.Phone,
-        Role: user.Role,
+        Role: 'customer',
       },
     };
   }

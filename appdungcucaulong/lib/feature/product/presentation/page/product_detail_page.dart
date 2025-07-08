@@ -1,5 +1,9 @@
 import 'package:appdungcucaulong/config/shared/widget/main_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../cart/data/dto/request/add_to_cart_dto.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/bloc/cart_event.dart';
 import '../../domain/entity/product_entity.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -12,14 +16,13 @@ class ProductDetailPage extends StatelessWidget {
       currentIndex: 0,
       body: Column(
         children: [
-          // AppBar thay thế
           SafeArea(
             child: Row(
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.pop(context); // Quay lại trang trước
+                    Navigator.pop(context); 
                   },
                 ),
                 const Expanded(
@@ -29,7 +32,7 @@ class ProductDetailPage extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(width: 48), // Để cân đối với nút back
+                const SizedBox(width: 48), 
               ],
             ),
           ),
@@ -61,7 +64,34 @@ class ProductDetailPage extends StatelessWidget {
                     product.description.isNotEmpty ? product.description : "Không có mô tả.",
                     style: const TextStyle(fontSize: 16),
                   ),
+                  const SizedBox(height: 80),
                 ],
+              ),
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                final dto = AddToCartDTO(
+                  productId: product.id,
+                  sizeId: 1, // 👈 TODO: sau này thay bằng dropdown chọn size
+                  quantity: 1,
+                );
+
+                context.read<CartBloc>().add(AddToCartEvent(dto));
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Đã thêm vào giỏ hàng")),
+                );
+              },
+              icon: const Icon(Icons.add_shopping_cart),
+              label: const Text("Thêm vào giỏ hàng"),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: Colors.green,
               ),
             ),
           ),

@@ -1,0 +1,14 @@
+# Hướng dẫn cài đặt và chạy ứng dụng
+npm install
+
+# Cài đặt các phụ thuộc
+npm install --save-dev
+
+# Cài đặt các phụ thuộc cần thiết
+npm install express mongoose dotenv cors
+
+# Cài đặt các phụ thuộc cho môi trường phát triển
+npm install --save-dev nodemon
+
+# Chạy ứng dụng
+npm run dev

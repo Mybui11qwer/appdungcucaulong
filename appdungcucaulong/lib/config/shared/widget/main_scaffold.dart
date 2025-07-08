@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../feature/login/presentation/page/login_page.dart';
+import '../../../feature/auth/presentation/page/login_page.dart';
 
 class MainScaffold extends StatefulWidget {
   final Widget body;

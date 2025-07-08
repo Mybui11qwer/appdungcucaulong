@@ -3,6 +3,7 @@ import Database from "../configs/db";
 import { Customer } from "../interfaces/models/customer.model";
 
 export class CustomerRepository {
+
   async createCustomer(data: Partial<Customer>): Promise<any> {
       const pool = await Database.getInstance();
       const request = pool.request();
@@ -12,10 +13,14 @@ export class CustomerRepository {
       .input("Email", sql.NVarChar, data.Email)
       .input("Phone", sql.NVarChar, data.Phone)
       .input("Password", sql.NVarChar, data.Password)
+      .input("Address", sql.NVarChar, data.Address ?? null)
+      .input("Gender", sql.NVarChar, data.Gender ?? null)
+      .input("Avatar", sql.NVarChar, data.Avatar ?? null)
+      .input("Role", sql.NVarChar, data.Role ?? 'customer')
       .query(`
-        INSERT INTO Customer (Username, Email, Phone, Password)
+        INSERT INTO Customer (Username, Email, Phone, Password, Address, Gender, Avatar, Role)
         OUTPUT INSERTED.*
-        VALUES (@Username, @Email, @Phone, @Password)
+        VALUES (@Username, @Email, @Phone, @Password, @Address, @Gender, @Avatar, @Role)
       `);
 
     return result.recordset[0]; // trả về row vừa insert

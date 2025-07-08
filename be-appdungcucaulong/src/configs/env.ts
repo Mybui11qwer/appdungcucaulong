@@ -53,5 +53,4 @@ class EnvConfig {
         return this.get("JWT_EXPIRY");
     }
 }
-
 export default EnvConfig.getInstance();

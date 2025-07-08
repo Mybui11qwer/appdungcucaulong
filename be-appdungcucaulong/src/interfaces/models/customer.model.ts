@@ -7,5 +7,5 @@ export interface Customer {
   Gender?: string;
   Password: string;
   Avatar?: string;
-  Role: 'customer' | 'admin';
+  Role?: 'customer' | 'admin';
 }

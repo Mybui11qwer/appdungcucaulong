@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'feature/login/presentation/page/login_page.dart';
+import 'feature/auth/presentation/page/login_page.dart';
 import 'feature/product/presentation/page/product_page.dart';
 import 'feature/product/domain/di/product_injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,24 +9,29 @@ import 'feature/product/presentation/bloc/product_event.dart';
 class SplashWrapper extends StatelessWidget {
   const SplashWrapper({super.key});
 
-  Future<bool> isLoggedIn() async {
+  Future<(bool isLoggedIn, int? customerId)> getLoginStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey('accessToken');
+    final token = prefs.getString('accessToken');
+    final customerId = prefs.getInt('customerId');
+    return (token != null, customerId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: isLoggedIn(),
+    return FutureBuilder<(bool, int?)>(
+      future: getLoginStatus(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
 
-        if (snapshot.data == true) {
+        final (loggedIn, customerId) = snapshot.data!;
+        if (loggedIn && customerId != null) {
           return BlocProvider(
             create: (_) => injectProductBloc()..add(LoadProductsEvent()),
-            child: const ProductPage(),
+            child: ProductPage(customerId: customerId),
           );
         } else {
           return LoginPage();

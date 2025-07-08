@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'feature/login/domain/di/login_injection.dart';
+import 'feature/auth/domain/di/auth_injection.dart';
+import 'feature/cart/domain/di/cart_injection.dart';
 import 'splash_wrapper.dart';
 
 void main() {
   // Init DI
-  initLoginFeature();
+  initAuthInjection();
+  initCartInjection();
   runApp(const BadmintonApp());
 }
 

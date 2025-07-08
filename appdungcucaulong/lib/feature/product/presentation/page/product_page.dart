@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../auth/domain/di/auth_injection.dart';
+import '../../../cart/presentation/bloc/cart_bloc.dart';
+import '../../../cart/presentation/page/cart_page.dart';
 import '../bloc/product_bloc.dart';
 import '../bloc/product_state.dart';
 import '../../domain/entity/product_entity.dart';
@@ -7,7 +10,8 @@ import 'product_detail_page.dart';
 import '../../../../config/shared/widget/main_scaffold.dart';
 
 class ProductPage extends StatelessWidget {
-  const ProductPage({super.key});
+  final int customerId;
+  const ProductPage({super.key, required this.customerId});
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +58,23 @@ class ProductPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Positioned(
+                      Positioned(
                         top: 50,
                         right: 16,
-                        child: Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Colors.white,
-                          size: 28,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CartPage(),
+                              ),
+                            );
+                          },
+                          child: const Icon(
+                            Icons.shopping_cart_outlined,
+                            color: Colors.white,
+                            size: 28,
+                          ),
                         ),
                       ),
                     ],
@@ -69,19 +83,17 @@ class ProductPage extends StatelessWidget {
                 SliverPadding(
                   padding: const EdgeInsets.all(16),
                   sliver: SliverGrid(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final product = state.products[index];
-                        return ProductCard(product: product);
-                      },
-                      childCount: state.products.length,
-                    ),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      mainAxisExtent: 250,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final product = state.products[index];
+                      return ProductCard(product: product);
+                    }, childCount: state.products.length),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          mainAxisExtent: 250,
+                        ),
                   ),
                 ),
               ],
@@ -97,7 +109,6 @@ class ProductPage extends StatelessWidget {
   }
 }
 
-
 class ProductCard extends StatelessWidget {
   final ProductEntity product;
 
@@ -111,7 +122,11 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => ProductDetailPage(product: product),
+            builder:
+                (_) => BlocProvider<CartBloc>(
+                  create: (_) => sl<CartBloc>(),
+                  child: ProductDetailPage(product: product),
+                ),
           ),
         );
       },
@@ -120,7 +135,11 @@ class ProductCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
-            BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2)),
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6,
+              offset: Offset(0, 2),
+            ),
           ],
         ),
         child: Column(
@@ -128,7 +147,9 @@ class ProductCard extends StatelessWidget {
           children: [
             // Image
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16),
+              ),
               child: Image.network(
                 product.image,
                 height: 130,
@@ -155,7 +176,10 @@ class ProductCard extends StatelessWidget {
                     product.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   const Text(
@@ -169,7 +193,7 @@ class ProductCard extends StatelessWidget {
                       Icons.favorite_border,
                       color: Colors.grey.shade400,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
