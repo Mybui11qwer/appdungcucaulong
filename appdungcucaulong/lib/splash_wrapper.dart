@@ -1,4 +1,4 @@
-import 'package:appdungcucaulong/page/intro-screen/index.dart';
+import 'package:appdungcucaulong/screen/intro-screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'feature/auth/presentation/page/login_page.dart';
@@ -17,29 +17,29 @@ class SplashWrapper extends StatelessWidget {
     return (token != null, customerId);
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return FutureBuilder<(bool, int?)>(
-  //     future: getLoginStatus(),
-  //     builder: (context, snapshot) {
-  //       if (!snapshot.hasData) {
-  //         return const Scaffold(
-  //           body: Center(child: CircularProgressIndicator()),
-  //         );
-  //       }
+  //  @override
+  //  Widget build(BuildContext context) {
+  //    return FutureBuilder<(bool, int?)>(
+  //      future: getLoginStatus(),
+  //      builder: (context, snapshot) {
+  //        if (!snapshot.hasData) {
+  //          return const Scaffold(
+  //            body: Center(child: CircularProgressIndicator()),
+  //          );
+  //        }
 
-  //       final (loggedIn, customerId) = snapshot.data!;
-  //       if (loggedIn && customerId != null) {
-  //         return BlocProvider(
-  //           create: (_) => injectProductBloc()..add(LoadProductsEvent()),
-  //           child: ProductPage(customerId: customerId),
-  //         );
-  //       } else {
-  //         return LoginPage();
-  //       }
-  //     },
-  //   );
-  // }
+  //        final (loggedIn, customerId) = snapshot.data!;
+  //        if (loggedIn && customerId != null) {
+  //          return BlocProvider(
+  //            create: (_) => injectProductBloc()..add(LoadProductsEvent()),
+  //            child: ProductPage(customerId: customerId),
+  //          );
+  //        } else {
+  //          return LoginPage();
+  //        }
+  //      },
+  //    );
+  //  }
 
   @override
   Widget build(BuildContext context) {
