@@ -1,6 +1,7 @@
 import 'package:appdungcucaulong/config/shared/widget/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/network/api_constants.dart';
 import '../../../cart/data/dto/request/add_to_cart_dto.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
@@ -43,7 +44,7 @@ class ProductDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.network(
-                    product.image,
+                    '${ApiConstants.baseUrl}/public/images/${product.image}',
                     height: 200,
                     width: double.infinity,
                     fit: BoxFit.cover,
