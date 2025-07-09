@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
                         create:
                             (_) =>
                                 injectProductBloc()..add(LoadProductsEvent()),
-                        child: ProductPage(customerId: customerId),
+                        child: ProductPage(customerId: customerId, productId: 0,),
                       ),
                 ),
               );

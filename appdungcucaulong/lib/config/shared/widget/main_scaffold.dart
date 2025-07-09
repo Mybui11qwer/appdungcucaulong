@@ -1,7 +1,5 @@
 import 'package:appdungcucaulong/config/shared/widget/sidebar_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../feature/auth/presentation/page/login_page.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class MainScaffold extends StatefulWidget {

@@ -9,7 +9,7 @@ import '../../domain/entity/product_entity.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final ProductEntity product;
-  const ProductDetailPage({super.key, required this.product});
+  const ProductDetailPage({super.key, required this.product, required int productId});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class ProductDetailPage extends StatelessWidget {
               onPressed: () {
                 final dto = AddToCartDTO(
                   productId: product.id,
-                  sizeId: 1, // 👈 TODO: sau này thay bằng dropdown chọn size
+                  sizeId: 1,
                   quantity: 1,
                 );
 

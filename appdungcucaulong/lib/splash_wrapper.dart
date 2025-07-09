@@ -31,7 +31,7 @@ class SplashWrapper extends StatelessWidget {
         if (loggedIn && customerId != null) {
           return BlocProvider(
             create: (_) => injectProductBloc()..add(LoadProductsEvent()),
-            child: ProductPage(customerId: customerId),
+            child: ProductPage(customerId: customerId, productId: 0),
           );
         } else {
           return LoginPage();

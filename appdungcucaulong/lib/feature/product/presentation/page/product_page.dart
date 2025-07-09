@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../config/shared/widget/main_scaffold.dart';
-import '../../../../config/shared/widget/sidebar_widget.dart';
+//import '../../../../config/shared/widget/sidebar_widget.dart';
 import '../../../../core/network/api_constants.dart';
 import '../../../product/presentation/bloc/product_bloc.dart';
 import '../../../product/presentation/bloc/product_state.dart';
 import '../../../product/domain/entity/product_entity.dart';
 import '../../../cart/presentation/page/cart_page.dart';
+import 'product_detail_page.dart';
 
 class ProductPage extends StatelessWidget {
-  final int customerId;
+  final int productId;
 
-  const ProductPage({super.key, required this.customerId});
+  const ProductPage({super.key, required this.productId, required int customerId});
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,12 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO: chuyển sang ProductDetailPage nếu muốn
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailPage(productId: product.id, product: product),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
