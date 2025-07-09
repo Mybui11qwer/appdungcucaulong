@@ -41,8 +41,8 @@ class SplashWrapper extends StatelessWidget {
   //    );
   //  }
 
-  @override
-  Widget build(BuildContext context) {
-    return(Intro());}
-  }
+@override
+Widget build(BuildContext context) {
+  return(Intro());}
+}
 
