@@ -1,5 +1,6 @@
 import 'package:appdungcucaulong/class/intro.dart';
 import 'package:appdungcucaulong/components/custom-elevated-btn/index.dart';
+import 'package:appdungcucaulong/components/custom-position-circle/index.dart';
 import 'package:appdungcucaulong/components/intro-card/index.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
@@ -38,28 +39,15 @@ class _IntroState extends State<Intro> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final double radius = 240; // Bán kính hình tròn
-
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
-            top:
-                (-radius / 2 - 40) *
-                2, // Đẩy hình tròn ra ngoài một chút ở phía trên
-            left:
-                screenWidth -
-                radius -
-                80 -
-                (radius / 2), // Đặt hình tròn ở giữa
-            child: Container(
-              width: radius * 2, // Đặt chiều rộng của hình tròn
-              height: radius * 2, // Đặt chiều cao của hình tròn
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue, // Màu của hình tròn
-              ),
-            ),
-          ),
+          CustomPositionCircle(
+            moveTop: 80, 
+            moveLeft: 40, 
+            radius: radius, 
+            screenWidth: screenWidth, 
+            screenHeight: screenHeight),
           Positioned(
             top: 200,
             child: Column(

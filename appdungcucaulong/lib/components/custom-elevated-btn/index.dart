@@ -20,19 +20,19 @@ class CustomelElevatebutton extends StatelessWidget {
       onPressed: onPressed,  
       style: ElevatedButton.styleFrom(
         backgroundColor: color, // Màu nền của nút
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8), // Rounded corners
         ),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),
       child: Padding(
         padding: const EdgeInsets.all(3.0),
         child: Text(
           text,
           style: TextStyle(
+            fontSize: 24,
             color: textColor,
             fontWeight: FontWeight.w500,
-            fontSize: 24
             ), // Đặt màu chữ ở đây
         ),
       ),

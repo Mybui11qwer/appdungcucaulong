@@ -1,33 +1,27 @@
+import 'package:appdungcucaulong/components/custom-position-circle/index.dart';
 import 'package:appdungcucaulong/components/custom-single-sroll/index.dart';
 import 'package:flutter/material.dart';
-import 'package:appdungcucaulong/components/custom-position-circle/index.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class ShopScreen extends StatelessWidget {
+  const ShopScreen({super.key});
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final double radius = 240; // Bán kính hình tròn
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
+    return SafeArea(
+      child: Stack(
         children: [
           CustomPositionCircle(
-            moveTop: 50, 
-            moveLeft: 80, 
-            radius: radius, 
-            screenWidth: screenWidth, 
+            moveTop: 40,
+            moveLeft: 80,
+            radius: radius,
+            screenWidth: screenWidth,
             screenHeight: screenHeight,
           ),
           CustomSingleScroll(
-            top: 0,
+            top: 100,
             bottom: 0,
             padding: const EdgeInsets.all(10),
             sons: [

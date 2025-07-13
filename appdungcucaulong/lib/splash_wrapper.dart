@@ -1,4 +1,5 @@
 import 'package:appdungcucaulong/screen/intro-screen/index.dart';
+import 'package:appdungcucaulong/screen/profile-screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'feature/auth/presentation/page/login_page.dart';
@@ -43,6 +44,6 @@ class SplashWrapper extends StatelessWidget {
 
 @override
 Widget build(BuildContext context) {
-  return(Intro());}
+  return(ProfileScreen());}
 }
 

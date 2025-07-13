@@ -24,11 +24,19 @@ class IntroCard extends StatelessWidget {
           children: [
             Image.asset(imgSrc),
             //title nè
-            CustomTitle(text: title, color: Colors.blue, txtSize: 32,fontWeight: FontWeight.w600,),
+            CustomTitle(
+              text: title, 
+              txtSize: 32,
+              color: Colors.blue, 
+              fontWeight: FontWeight.w600,),
             SizedBox(
               width: 350,
               //subtitle nè
-              child: CustomTitle(text: subTitle, txtSize: 16,color: Colors.black38,textAlign: TextAlign.center ,),
+              child: CustomTitle(
+                txtSize: 16,
+                text: subTitle, 
+                color: Colors.black38,
+                textAlign: TextAlign.center ,),
             ),
             //Nếu có thêm button truyền vô thì render nó ra 
             SizedBox(height: 190),
@@ -37,6 +45,5 @@ class IntroCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

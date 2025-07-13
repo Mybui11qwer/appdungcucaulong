@@ -9,3 +9,10 @@ class IntroModel {
     required this.subTitle,
   });
 }
+
+class CategoryModel {
+  final String imgSrc;
+  final String title;
+
+  CategoryModel({required this.imgSrc, required this.title});
+}
