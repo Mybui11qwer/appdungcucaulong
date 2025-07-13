@@ -18,32 +18,30 @@ class SplashWrapper extends StatelessWidget {
     return (token != null, customerId);
   }
 
-  //  @override
-  //  Widget build(BuildContext context) {
-  //    return FutureBuilder<(bool, int?)>(
-  //      future: getLoginStatus(),
-  //      builder: (context, snapshot) {
-  //        if (!snapshot.hasData) {
-  //          return const Scaffold(
-  //            body: Center(child: CircularProgressIndicator()),
-  //          );
-  //        }
+  @override
+  Widget build(BuildContext context) {
+    //Phần login
+    //     return FutureBuilder<(bool, int?)>(
+    //       future: getLoginStatus(),
+    //       builder: (context, snapshot) {
+    //         if (!snapshot.hasData) {
+    //           return const Scaffold(
+    //             body: Center(child: CircularProgressIndicator()),
+    //           );
+    //         }
 
-  //        final (loggedIn, customerId) = snapshot.data!;
-  //        if (loggedIn && customerId != null) {
-  //          return BlocProvider(
-  //            create: (_) => injectProductBloc()..add(LoadProductsEvent()),
-  //            child: ProductPage(customerId: customerId),
-  //          );
-  //        } else {
-  //          return LoginPage();
-  //        }
-  //      },
-  //    );
-  //  }
-
-@override
-Widget build(BuildContext context) {
-  return(ProfileScreen());}
+    //       final (loggedIn, customerId) = snapshot.data!;
+    //       if (loggedIn && customerId != null) {
+    //         return BlocProvider(
+    //           create: (_) => injectProductBloc()..add(LoadProductsEvent()),
+    //           child: ProductPage(customerId: customerId, productId: 0),
+    //         );
+    //       } else {
+    //         return LoginPage();
+    //       }
+    //     },
+    //   );
+    // }
+    return (ProfileScreen());
+  }
 }
-

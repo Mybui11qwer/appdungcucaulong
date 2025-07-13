@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/network/api_constants.dart';
 import '../../../auth/domain/di/auth_injection.dart' show sl;
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
@@ -27,7 +28,7 @@ class CartPage extends StatelessWidget {
                 itemBuilder: (_, index) {
                   final item = state.items[index];
                   return ListTile(
-                    leading: Image.network(item.image, width: 50, height: 50, fit: BoxFit.cover),
+                    leading: Image.network('${ApiConstants.baseUrl}/public/images/${item.image}', width: 50, height: 50, fit: BoxFit.cover),
                     title: Text(item.productName),
                     subtitle: Text("${item.price} đ x ${item.quantity}"),
                     trailing: IconButton(

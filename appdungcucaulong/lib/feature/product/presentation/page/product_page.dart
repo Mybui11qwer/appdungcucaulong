@@ -1,109 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../auth/domain/di/auth_injection.dart';
-import '../../../cart/presentation/bloc/cart_bloc.dart';
-import '../../../cart/presentation/page/cart_page.dart';
-import '../bloc/product_bloc.dart';
-import '../bloc/product_state.dart';
-import '../../domain/entity/product_entity.dart';
-import 'product_detail_page.dart';
 import '../../../../config/shared/widget/main_scaffold.dart';
+//import '../../../../config/shared/widget/sidebar_widget.dart';
+import '../../../../core/network/api_constants.dart';
+import '../../../product/presentation/bloc/product_bloc.dart';
+import '../../../product/presentation/bloc/product_state.dart';
+import '../../../product/domain/entity/product_entity.dart';
+import '../../../cart/presentation/page/cart_page.dart';
+import 'product_detail_page.dart';
 
 class ProductPage extends StatelessWidget {
-  final int customerId;
-  const ProductPage({super.key, required this.customerId});
+  final int productId;
+
+  const ProductPage({super.key, required this.productId, required int customerId});
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return MainScaffold(
       currentIndex: 0,
-      body: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          if (state is ProductLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is ProductLoaded) {
-            return CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Stack(
-                    children: [
-                      Image.asset(
-                        'assets/images/banner.png',
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: 180,
+      body: Stack(
+        children: [
+          // Banner background
+          Container(
+            height: screenHeight,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/banner.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          // Logo + Title
+          Positioned(
+            top: 25,
+            left: 20,
+            right: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Image.asset('assets/images/badminton_mascot.png', height: 50),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const CartPage()),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                        size: 30,
                       ),
-                      Positioned(
-                        top: 60,
-                        left: 16,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              "The Ultimate Collection",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "Best gears ever",
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                        top: 50,
-                        right: 16,
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const CartPage(),
-                              ),
-                            );
-                          },
-                          child: const Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'The Ultimate\nCollection',
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverGrid(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final product = state.products[index];
-                      return ProductCard(product: product);
-                    }, childCount: state.products.length),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          mainAxisExtent: 250,
-                        ),
-                  ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Best gears ever',
+                  style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
               ],
-            );
-          } else if (state is ProductError) {
-            return Center(child: Text("Lỗi: ${state.message}"));
-          }
+            ),
+          ),
 
-          return const SizedBox.shrink();
-        },
+          // Product list (real data from BLoC)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            top: screenHeight * 0.4, // điều chỉnh tùy độ dài banner
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is ProductLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is ProductLoaded) {
+                    final products = state.products;
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      physics: const BouncingScrollPhysics(),
+                      children: products
+                          .map((product) => ProductCard(product: product))
+                          .toList(),
+                    );
+                  } else if (state is ProductError) {
+                    return Center(child: Text("Lỗi: ${state.message}"));
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -118,84 +123,55 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // 👉 Chuyển sang trang chi tiết
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder:
-                (_) => BlocProvider<CartBloc>(
-                  create: (_) => sl<CartBloc>(),
-                  child: ProductDetailPage(product: product),
-                ),
+            builder: (context) => ProductDetailPage(productId: product.id, product: product),
           ),
         );
       },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(0, 2),
+              blurRadius: 12,
+              offset: Offset(0, 6),
             ),
           ],
         ),
+        padding: const EdgeInsets.all(8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-              child: Image.network(
-                product.image,
-                height: 130,
-                width: double.infinity,
-                fit: BoxFit.cover,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  '${ApiConstants.baseUrl}/public/images/${product.image}',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-            // Info
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${product.price.toStringAsFixed(0)} đ",
-                    style: const TextStyle(
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    product.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Racket",
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                  const SizedBox(height: 4),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(
-                      Icons.favorite_border,
-                      color: Colors.grey.shade400,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 8),
+            Text(
+              '${product.price.toStringAsFixed(0)} đ',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[800],
               ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              product.name,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            const Align(
+              alignment: Alignment.bottomRight,
+              child: Icon(Icons.favorite_border, size: 16),
             ),
           ],
         ),

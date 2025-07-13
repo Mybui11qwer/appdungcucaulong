@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
+import { AuthController } from "../controllers/Auth.Controller";
 import { CustomerRepository } from "../repositories/auth.repository";
 import { AuthService } from "../services/auth.service";
 
