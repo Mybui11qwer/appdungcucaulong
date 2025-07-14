@@ -70,6 +70,7 @@ flutter:
   assets:
     - assets/
     - assets/intro_img/
+    - assets/images/
     - assets/images/badminton_mascot.png
     - assets/images/banner.png
   #   - images/a_dot_ham.jpeg

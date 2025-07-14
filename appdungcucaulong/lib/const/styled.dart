@@ -58,7 +58,7 @@ class TextStyled {
 
   static final s4 = GoogleFonts.poppins(
     fontSize: 16,
-    color: subCL,
+    color: Colors.black,
     fontWeight: FontWeight.normal,
   );
 
@@ -92,4 +92,35 @@ class TextStyled {
     color: mainCL,
     fontWeight: FontWeight.normal,
   );
+}
+
+class ColorTextStyled {
+  static const success = Colors.blue;
+  static const danger = Colors.redAccent;
+
+  static final SuccessText = GoogleFonts.poppins(
+    fontSize: 38,
+    fontWeight: FontWeight.bold,
+    color: success,
+  );
+
+  static final BoldTextH1 = GoogleFonts.poppins(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: success,
+  );
+
+  static final BoldTextH2 = GoogleFonts.poppins(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: success,
+  );
+
+  static final BoldTextH3 = GoogleFonts.poppins(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    color: success,
+  );
+
+  
 }
