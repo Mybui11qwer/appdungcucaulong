@@ -1,3 +1,4 @@
+import 'package:appdungcucaulong/screen/category-screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:appdungcucaulong/class/intro.dart';
 import 'package:appdungcucaulong/components/clipath-img/index.dart';
@@ -32,15 +33,22 @@ class CatergoriesSection extends StatelessWidget {
               itemCount: categories.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.only(right: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ClipCircleImg(imgPath: categories[index].imgSrc, size: 50,),
-                      SizedBox(height: 5,),
-                      CustomTitle(text: categories[index].title, txtSize: 12,),
-                    ],
+                return GestureDetector(
+                  onTap: ()=>{
+                    Navigator.push(context, 
+                    MaterialPageRoute(builder: (context)=> 
+                    CategoryScreen(category: categories[index].title,)))
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 25),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipCircleImg(imgPath: categories[index].imgSrc, size: 50,),
+                        SizedBox(height: 5,),
+                        CustomTitle(text: categories[index].title, txtSize: 12,),
+                      ],
+                    ),
                   ),
                 );
               },

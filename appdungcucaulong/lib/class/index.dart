@@ -14,6 +14,7 @@ class BoxSize {
   });
 }
 
+
 class ProdutCardModel {
   final String imgSrc;
   final double price;
@@ -28,4 +29,11 @@ class ProdutCardModel {
     required this.productName,
     required this.productCategory,
   });
+}
+
+class SortingOption {
+  final String option;
+  final IconData optIcon;
+
+  SortingOption({required this.optIcon, required this.option});
 }

@@ -40,6 +40,7 @@ class _ProductByCategoriesState extends State<ProductByCategories> {
     );
     final double screenWidth = MediaQuery.of(context).size.width;
 
+    //Gọi hàm để biết lọc ra sản phẩm nào
     handleCategoriesModel(widget.categoryTitle);
 
     return Container(

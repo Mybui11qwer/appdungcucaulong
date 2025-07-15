@@ -7,7 +7,9 @@ import 'package:appdungcucaulong/components/parallel-widget/index.dart';
 class ProductCardVer2 extends StatefulWidget {
   final BoxSize? boxSize;
   final ProdutCardModel? product;
-  const ProductCardVer2({super.key, required this.boxSize, this.product});
+  final String? type; // mốt làm thêm
+
+  const ProductCardVer2({super.key, required this.boxSize, this.product, this.type});
 
   @override
   State<ProductCardVer2> createState() => _ProductCardVer2State();
@@ -66,7 +68,10 @@ class _ProductCardVer2State extends State<ProductCardVer2> {
               ),
             ),
             SizedBox(height: 10),
-            CustomTitle(text: widget.product!.productName, textStyle: TextStyled.s4),
+            CustomTitle(
+              text: widget.product!.productName,
+              textStyle: TextStyled.s4,
+            ),
             SizedBox(height: 25),
             ParallelWidget(
               widget1: CustomTitle(
