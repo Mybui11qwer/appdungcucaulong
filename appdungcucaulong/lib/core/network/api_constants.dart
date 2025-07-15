@@ -12,4 +12,7 @@ class ApiConstants {
   static const getCart = '$baseUrl/cart';
   static const addToCart = '$baseUrl/cart/add';
   static const removeFromCart = '$baseUrl/cart/remove';
+
+  //profile
+  static const userProfile = '$baseUrl/user/profile';
 }

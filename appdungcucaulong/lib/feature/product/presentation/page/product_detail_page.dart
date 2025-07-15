@@ -1,4 +1,3 @@
-import 'package:appdungcucaulong/config/shared/widget/main_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/network/api_constants.dart';
@@ -13,8 +12,7 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      currentIndex: 0,
+    return Scaffold(
       body: Column(
         children: [
           SafeArea(
@@ -92,7 +90,7 @@ class ProductDetailPage extends StatelessWidget {
               label: const Text("Thêm vào giỏ hàng"),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.red,
               ),
             ),
           ),

@@ -1,9 +1,10 @@
+import 'package:appdungcucaulong/feature/product/presentation/bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../product/domain/di/product_injection.dart';
 import '../../../product/presentation/bloc/product_event.dart';
-import '../../../product/presentation/page/product_page.dart';
+import '../../../product/presentation/page/index.dart';
 import '../bloc/login_bloc.dart';
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
@@ -32,16 +33,14 @@ class LoginPage extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('✅ Đăng nhập thành công')),
               );
-              final customerId = state.user.customerId;
+              //final customerId = state.user.customerId;
 
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder:
-                      (_) => BlocProvider(
-                        create:
-                            (_) =>
-                                injectProductBloc()..add(LoadProductsEvent()),
-                        child: ProductPage(customerId: customerId, productId: 0,),
+                      (_) => BlocProvider<ProductBloc>(
+                        create: (_) => getIt<ProductBloc>()..add(LoadProductsEvent()),
+                        child: IndexPage(),
                       ),
                 ),
               );

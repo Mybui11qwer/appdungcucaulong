@@ -8,6 +8,7 @@ import '../repository/cart_repository.dart';
 import '../usecase/get_cart_usecase.dart';
 
 final getIt = GetIt.instance;
+
 void initCartInjection() {
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => CartRemoteDataSource(client: sl()));
