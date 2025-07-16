@@ -43,11 +43,12 @@ class _IntroState extends State<Intro> {
       body: Stack(
         children: [
           CustomPositionCircle(
-            moveTop: 80, 
-            moveLeft: 40, 
+            moveTop: 60, 
+            moveLeft: 80, 
             radius: radius, 
             screenWidth: screenWidth, 
-            screenHeight: screenHeight),
+            screenHeight: screenHeight
+          ),
           Positioned(
             top: 200,
             child: Column(

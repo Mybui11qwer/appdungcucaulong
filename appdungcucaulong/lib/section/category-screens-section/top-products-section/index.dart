@@ -20,8 +20,7 @@ class _TopSaleProductsState extends State<TopSaleProducts> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    ProdutCardModel product = Raw.produtCardModel;
-
+    
     return Container(
       margin: const EdgeInsets.only(top: 30),
       padding: const EdgeInsets.only(right: 10),
@@ -50,7 +49,7 @@ class _TopSaleProductsState extends State<TopSaleProducts> {
               child: CustomSilverGrid(
                 quantity: 2,
                 aspectRatio: 0.62,
-                itemBuilder: ((context, index) => ProductCardVer2(boxSize: boxSize, product: product,)),
+                itemBuilder: ((context, index) => ProductCardVer2(boxSize: boxSize, product: Raw.produtCardModel,type: 'speacial',)),
               ),
             ),
           ),

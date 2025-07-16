@@ -105,7 +105,7 @@ class ColorTextStyled {
   );
 
   static final BoldTextH1 = GoogleFonts.poppins(
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: FontWeight.bold,
     color: success,
   );
@@ -121,6 +121,5 @@ class ColorTextStyled {
     fontWeight: FontWeight.bold,
     color: success,
   );
-
-  
 }
+

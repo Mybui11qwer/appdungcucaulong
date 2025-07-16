@@ -35,7 +35,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             sons: [
               SizedBox(
                 width: screenWidth,
-                height: 1000,
+                height: 1200,
                 child: Stack(
                   children: [
                     Positioned(
@@ -51,7 +51,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         )
                     ),
                     Positioned(
-                      top: 500,
+                      top: 600,
                       left: -100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(200),
@@ -68,9 +68,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         TopSaleProducts(categoryTitle: widget.category),
                         AllCategoryProductSection(),
                       ],
-                    )
-                    
-                    
+                    ),
                   ],
                 ),
               ),

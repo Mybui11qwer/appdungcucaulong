@@ -25,7 +25,7 @@ class CustomSilverGrid extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         itemCount: itemCount, // Số phần tử trong GridView
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          mainAxisSpacing: 16,
+          mainAxisSpacing: 10,
           crossAxisSpacing: 10,
           crossAxisCount: 2, // Số cột
           childAspectRatio: aspectRatio ?? 0.62, // Giữ tỷ lệ chiều rộng và chiều cao

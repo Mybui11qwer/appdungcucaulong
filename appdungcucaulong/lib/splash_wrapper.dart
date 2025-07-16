@@ -1,15 +1,15 @@
-import 'package:appdungcucaulong/screen/intro-screen/index.dart';
-import 'package:appdungcucaulong/screen/profile-screen/index.dart';
-import 'package:appdungcucaulong/screen/shop-screen/index.dart';
-import 'package:appdungcucaulong/screen/verify-mail-screen/index.dart';
-import 'package:appdungcucaulong/screen/verify-screen/index.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'feature/auth/presentation/page/login_page.dart';
+import 'package:appdungcucaulong/screen/shop-screen/index.dart';
+import 'package:appdungcucaulong/screen/verify-mail-screen/index.dart';
+import 'package:appdungcucaulong/screen/profile-screen/index.dart';
+import 'package:appdungcucaulong/screen/verify-screen/index.dart';
+import 'package:appdungcucaulong/screen/intro-screen/index.dart';
+import 'feature/product/presentation/bloc/product_event.dart';
 import 'feature/product/presentation/page/product_page.dart';
 import 'feature/product/domain/di/product_injection.dart';
+import 'feature/auth/presentation/page/login_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'feature/product/presentation/bloc/product_event.dart';
 
 class SplashWrapper extends StatelessWidget {
   const SplashWrapper({super.key});
@@ -23,6 +23,7 @@ class SplashWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //tạm comment lại để render cac giao dien khac
     //Phần login
     //     return FutureBuilder<(bool, int?)>(
     //       future: getLoginStatus(),
@@ -45,6 +46,6 @@ class SplashWrapper extends StatelessWidget {
     //     },
     //   );
     // }
-    return (ShopScreen());
+    return (ProfileScreen());
   }
 }

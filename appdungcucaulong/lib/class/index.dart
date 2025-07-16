@@ -14,7 +14,6 @@ class BoxSize {
   });
 }
 
-
 class ProdutCardModel {
   final String imgSrc;
   final double price;
@@ -36,4 +35,13 @@ class SortingOption {
   final IconData optIcon;
 
   SortingOption({required this.optIcon, required this.option});
+}
+
+//Xử lý kiểu hiển thị giao diện của ProductCard
+class ProductCardType {
+  final String? type;
+  final Color? txtColor;
+  final Color? bgColor;
+
+  ProductCardType({this.type, this.txtColor, this.bgColor});
 }
