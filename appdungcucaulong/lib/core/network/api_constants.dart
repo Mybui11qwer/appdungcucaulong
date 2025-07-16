@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const baseUrl = 'http://10.13.21.138:3000/api';
+  static const baseUrl = 'http://192.168.1.14:3000/api';
   //auth
   static const login = '$baseUrl/login';
   static const register = '$baseUrl/register';
@@ -15,4 +15,9 @@ class ApiConstants {
 
   //profile
   static const userProfile = '$baseUrl/user/profile';
+
+  // order
+  static const orders = '$baseUrl/order';
+  static String ordersByCustomer(int customerId) => '$orders/customer/$customerId';
+  static String orderDetail(int orderId) => '$orders/$orderId';
 }

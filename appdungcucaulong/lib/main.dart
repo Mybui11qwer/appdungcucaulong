@@ -5,6 +5,7 @@ import 'feature/auth/domain/di/auth_injection.dart';
 import 'feature/cart/domain/di/cart_injection.dart' as cart_di;
 import 'feature/cart/presentation/bloc/cart_bloc.dart';
 //import 'feature/product/presentation/page/index.dart';
+import 'feature/order/domain/di/order_injection.dart';
 import 'feature/product/domain/di/product_injection.dart' as product_di;
 import 'feature/product/presentation/bloc/product_bloc.dart';
 import 'feature/product/presentation/bloc/product_event.dart';
@@ -17,6 +18,7 @@ void main() {
   initAuthInjection();
   cart_di.initCartInjection();
   product_di.initProductInjection();
+  initOrderModule();
   runApp(
     MultiBlocProvider(
       providers: [
