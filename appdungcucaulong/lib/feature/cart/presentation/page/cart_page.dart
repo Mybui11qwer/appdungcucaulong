@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../../core/network/api_constants.dart';
-import '../../../auth/domain/di/auth_injection.dart' show sl;
+import '../../../auth/domain/di/auth_injection.dart';
 import '../../../order/presentation/page/checkout_page.dart';
 import '../bloc/cart_bloc.dart';
 import '../bloc/cart_event.dart';
@@ -16,109 +15,182 @@ class CartPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => sl<CartBloc>()..add(LoadCartEvent()),
       child: Scaffold(
-        appBar: AppBar(title: Text("Giỏ hàng")),
-        body: BlocBuilder<CartBloc, CartState>(
-          builder: (context, state) {
-            if (state is CartLoading) return Center(child: CircularProgressIndicator());
-            if (state is CartError) return Center(child: Text("❌ ${state.message}"));
-            if (state is CartLoaded) {
-              if (state.items.isEmpty) return Center(child: Text("🛒 Giỏ hàng trống"));
+        backgroundColor: Color(0xFF0B3D91), // Deep Blue
+        body: SafeArea(
+          child: BlocBuilder<CartBloc, CartState>(
+            builder: (context, state) {
+              if (state is CartLoading) return Center(child: CircularProgressIndicator());
+              if (state is CartError) return Center(child: Text("❌ ${state.message}"));
 
-              final totalPrice = state.items.fold<double>(
-                0,
-                    (sum, item) => sum + (item.price * item.quantity),
-              );
+              if (state is CartLoaded) {
+                if (state.items.isEmpty) return Center(child: Text("🛒 Giỏ hàng trống"));
 
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.items.length,
-                      itemBuilder: (_, index) {
-                        final item = state.items[index];
-                        return ListTile(
-                          leading: Image.network(
-                            '${ApiConstants.baseUrl}/public/images/${item.image}',
-                            width: 50,
-                            height: 50,
-                            fit: BoxFit.cover,
+                final totalPrice = state.items.fold<double>(
+                  0,
+                  (sum, item) => sum + (item.price * item.quantity),
+                );
+
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(16),
+                        itemCount: state.items.length,
+                        itemBuilder: (_, index) {
+                          final item = state.items[index];
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(color: Colors.black12, blurRadius: 4),
+                              ],
+                            ),
+                            child: Stack(
+                              children: [
+                                // Decorative Circles
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.lightBlue[100],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: Container(
+                                    width: 30,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.blue[800],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Image.network(
+                                          '${ApiConstants.baseUrl}/public/images/${item.image}',
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.productName,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text("Yonex", style: TextStyle(color: Colors.grey[600])),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              "${item.price.toStringAsFixed(0)} \$",
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(Icons.remove_circle, color: Colors.blue),
+                                            onPressed: () {
+                                              if (item.quantity > 1) {
+                                                context.read<CartBloc>().add(
+                                                    UpdateQuantityEvent(item.id, item.quantity - 1));
+                                              }
+                                            },
+                                          ),
+                                          Text(
+                                            "${item.quantity}",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.add_circle, color: Colors.blue),
+                                            onPressed: () {
+                                              context.read<CartBloc>().add(
+                                                  UpdateQuantityEvent(item.id, item.quantity + 1));
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                        boxShadow: [
+                          BoxShadow(color: Colors.black26, blurRadius: 6),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Total: ${totalPrice.toStringAsFixed(0)} \$",
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                          title: Text(item.productName),
-                          subtitle: Text("${item.price} đ x ${item.quantity}"),
-                          trailing: IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () async {
-                              final confirm = await showDialog<bool>(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: Text("Xác nhận"),
-                                  content: Text("Bạn có chắc muốn xoá sản phẩm này khỏi giỏ hàng?"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context, false),
-                                      child: Text("Huỷ"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context, true),
-                                      child: Text("Xoá"),
-                                    ),
-                                  ],
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CheckoutPage(cartItems: state.items),
                                 ),
                               );
-
-                              if (confirm == true) {
-                                context.read<CartBloc>().add(RemoveFromCartEvent(item.id));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("🗑 Đã xóa sản phẩm")),
-                                );
-                              }
                             },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Tổng: ${totalPrice.toStringAsFixed(0)} đ",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => CheckoutPage(cartItems: state.items),
+                            icon: Icon(Icons.check_circle_outline),
+                            label: Text("Checkout"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF004AAD),
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
                               ),
-                            );
-                          },
-                          icon: Icon(Icons.shopping_cart_checkout),
-                          label: Text("Thanh toán"),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                            backgroundColor: Colors.green,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }
+                  ],
+                );
+              }
 
-            return SizedBox.shrink();
-          },
+              return SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );
   }
 }
-

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
+import '../../../feature/favorite/presentation/page/favorites_page.dart';
+import '../../../feature/notification/presentation/page/notifications_page.dart';
 import '../../../feature/profile/presentation/page/profile_page.dart';
 import '../../../feature/product/presentation/page/index.dart';
 import '../../../feature/product/presentation/page/product_page.dart';
@@ -53,10 +55,10 @@ class _MainScaffoldState extends State<MainScaffold> {
         _navigateWithFade(context, const IndexPage());
         break;
       case 1:
-        _navigateWithFade(context, const IndexPage());
+        _navigateWithFade(context, const NotificationsPage());
         break;
       case 2:
-        _navigateWithFade(context, const IndexPage());
+        _navigateWithFade(context, const FavoritesPage());
         break;
       case 3:
         _navigateWithFade(context, const ProductPage());

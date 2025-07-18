@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/network/api_constants.dart';
-import '../../../cart/presentation/page/cart_page.dart';
+//import '../../../cart/presentation/page/cart_page.dart';
+import '../../../cart/presentation/widget/cart_top_sheet.dart';
 import '../bloc/product_bloc.dart';
 import '../bloc/product_state.dart';
 import 'product_detail_page.dart';
@@ -58,11 +59,8 @@ class ProductPage extends StatelessWidget {
           const SizedBox(width: 24),
           GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const CartPage()),
-            );
-          },
+              showCartTopSheet(context);
+            },
           child: _circleIcon(Icons.shopping_cart_outlined),
           ),
         ],

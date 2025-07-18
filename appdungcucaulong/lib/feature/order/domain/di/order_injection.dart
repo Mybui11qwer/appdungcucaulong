@@ -11,19 +11,31 @@ import '../../domain/usecase/get_order_detail_usecase.dart';
 final sl = GetIt.instance;
 
 void initOrderModule() {
-  if (!sl.isRegistered<OrderRemoteDatasource>()) {
+  if (!sl.isRegistered<http.Client>()) {
     sl.registerLazySingleton(() => http.Client());
+  }
 
+  if (!sl.isRegistered<OrderRemoteDatasource>()) {
     sl.registerLazySingleton<OrderRemoteDatasource>(
-          () => OrderRemoteDatasource(client: sl()),
+      () => OrderRemoteDatasource(client: sl()),
     );
+  }
 
+  if (!sl.isRegistered<OrderRepository>()) {
     sl.registerLazySingleton<OrderRepository>(
-          () => OrderRepositoryImpl(remoteDatasource: sl()),
+      () => OrderRepositoryImpl(remoteDatasource: sl()),
     );
+  }
 
+  if (!sl.isRegistered<CreateOrderUseCase>()) {
     sl.registerLazySingleton(() => CreateOrderUseCase(sl()));
+  }
+
+  if (!sl.isRegistered<GetOrdersByCustomerUseCase>()) {
     sl.registerLazySingleton(() => GetOrdersByCustomerUseCase(sl()));
+  }
+
+  if (!sl.isRegistered<GetOrderDetailUseCase>()) {
     sl.registerLazySingleton(() => GetOrderDetailUseCase(sl()));
   }
 }

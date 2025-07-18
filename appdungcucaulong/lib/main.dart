@@ -1,4 +1,3 @@
-import 'package:appdungcucaulong/feature/product/presentation/page/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'feature/auth/domain/di/auth_injection.dart';
@@ -13,24 +12,16 @@ import 'feature/profile/domain/di/profile_injection.dart';
 import 'splash_wrapper.dart';
 
 void main() {
-  // Init DI
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Khởi tạo các DI
   initProfileModule();
   initAuthInjection();
   cart_di.initCartInjection();
   product_di.initProductInjection();
   initOrderModule();
-  runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => cart_di.getIt<CartBloc>()),
-        BlocProvider(
-          create: (_) => product_di.getIt<ProductBloc>()..add(LoadProductsEvent()),
-          child: IndexPage(),
-        )
-      ],
-      child: const BadmintonApp(),
-    ),
-  );
+
+  runApp(const BadmintonApp());
 }
 
 class BadmintonApp extends StatelessWidget {
@@ -38,14 +29,23 @@ class BadmintonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Badminton App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => cart_di.getIt<CartBloc>()),
+        BlocProvider(
+          create: (_) => product_di.getIt<ProductBloc>()..add(LoadProductsEvent()),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Badminton App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          fontFamily: 'Roboto',
+        ),
+        debugShowCheckedModeBanner: false,
+        home: const SplashWrapper(),
       ),
-      debugShowCheckedModeBanner: false,
-      home: const SplashWrapper(),
     );
   }
 }
+

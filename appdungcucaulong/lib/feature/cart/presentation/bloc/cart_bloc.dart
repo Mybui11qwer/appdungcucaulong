@@ -39,5 +39,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(CartError("Xoá sản phẩm thất bại"));
       }
     });
+
+    on<UpdateQuantityEvent>((event, emit) async {
+      try {
+        // Gọi service để update quantity (tuỳ vào cách bạn lưu cart)
+        await cartRepository.updateQuantity(event.productId, event.quantity);
+        final items = await cartRepository.getCart();
+        emit(CartLoaded(items));
+      } catch (e) {
+        emit(CartError("Lỗi khi cập nhật số lượng"));
+      }
+    });
   }
 }

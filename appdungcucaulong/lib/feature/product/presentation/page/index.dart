@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../config/shared/widget/main_scaffold.dart';
 //import '../../../../config/shared/widget/sidebar_widget.dart';
 import '../../../../core/network/api_constants.dart';
+import '../../../cart/presentation/widget/cart_top_sheet.dart';
 import '../../../product/presentation/bloc/product_bloc.dart';
 import '../../../product/presentation/bloc/product_state.dart';
 import '../../../product/domain/entity/product_entity.dart';
-import '../../../cart/presentation/page/cart_page.dart';
+//import '../../../cart/presentation/page/cart_page.dart';
 import 'product_detail_page.dart';
 
 class IndexPage extends StatelessWidget {
@@ -52,10 +53,7 @@ class IndexPage extends StatelessWidget {
                     Image.asset('assets/images/badminton_mascot.png', height: 50),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const CartPage()),
-                        );
+                        showCartTopSheet(context);
                       },
                       child: _circleIcon(Icons.shopping_cart_outlined),
                     ),
@@ -156,6 +154,7 @@ class ProductCard extends StatelessWidget {
           border: Border.all(color: Colors.blue.shade50, width: 2),
           boxShadow: [
             BoxShadow(
+              // ignore: deprecated_member_use
               color: Colors.blue.withOpacity(0.15),
               blurRadius: 18,
               offset: const Offset(0, 8),
@@ -215,6 +214,7 @@ class ProductCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.blue.withOpacity(0.12),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
