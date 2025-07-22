@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../../core/network/api_constants.dart';
+import '../../domain/entity/order_detail_entity.dart';
 import '../../domain/entity/order_entity.dart';
 import '../dto/order_dto.dart';
 
@@ -35,7 +36,6 @@ class OrderRemoteDatasource {
       return OrderEntity(
         id: id,
         customerId: customerId,
-        items: [], // có thể load lại sau
         total: total,
         status: 'Chờ xử lý',
         paymentMethod: paymentMethod,
@@ -61,34 +61,16 @@ class OrderRemoteDatasource {
     }
   }
 
-  Future<OrderEntity> getOrderDetail(int orderId) async {
-    final response = await client.get(
+  Future<List<OrderItemEntity>> getOrderDetails(int orderId) async {
+    final response = await http.get(
       Uri.parse('${ApiConstants.baseUrl}/order/$orderId'),
     );
 
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
-      final items = data.map((e) => OrderItemEntity(
-        productId: e['ID_Product'],
-        sizeId: e['ID_Size'],
-        quantity: e['Quantity'],
-        unitPrice: (e['Unit_Price'] as num).toDouble(),
-      )).toList();
-
-      return OrderEntity(
-        id: orderId,
-        customerId: 0,
-        orderDate: null,
-        total: items.fold(0.0, (sum, item) => sum + item.quantity * item.unitPrice),
-        status: '',
-        paymentMethod: '',
-        shippingAddress: '',
-        items: items,
-        saleId: null,
-      );
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => OrderItemEntity.fromJson(e)).toList();
     } else {
-      throw Exception('Không tìm thấy chi tiết đơn hàng');
+      throw Exception('Failed to load order details');
     }
   }
-
 }

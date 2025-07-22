@@ -58,6 +58,35 @@ router.post("/add", verifyToken, controller.addToCart);
 
 /**
  * @swagger
+ * /cart/updateQuantity:
+ *   put:
+ *     summary: Cập nhật số lượng sản phẩm trong giỏ hàng
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - cartItemId
+ *               - quantity
+ *             properties:
+ *               cartItemId:
+ *                 type: integer
+ *               quantity:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Cập nhật thành công
+ */
+router.put("/updateQuantity", verifyToken, controller.updateQuantity);
+
+
+/**
+ * @swagger
  * /cart/remove:
  *   delete:
  *     summary: Xóa sản phẩm khỏi giỏ hàng

@@ -22,4 +22,7 @@ void initProductInjection() {
       getProductById: usecase2,
     ),
   );
+
+  getIt.registerLazySingleton<GetAllProductsUsecase>(() => usecase1);
+  getIt.registerLazySingleton<GetProductDetailUseCase>(() => usecase2);
 }

@@ -1,4 +1,5 @@
-import '../entity/order_entity.dart';
+import 'package:appdungcucaulong/feature/order/domain/entity/order_detail_entity.dart';
+
 import '../repository/order_repository.dart';
 
 class GetOrderDetailUseCase {
@@ -6,7 +7,7 @@ class GetOrderDetailUseCase {
 
   GetOrderDetailUseCase(this.repository);
 
-  Future<OrderEntity> call(int orderId) {
-    return repository.getOrderDetail(orderId);
+  Future<List<OrderItemEntity>> call(int orderId) {
+    return repository.getOrderDetails(orderId);
   }
 }

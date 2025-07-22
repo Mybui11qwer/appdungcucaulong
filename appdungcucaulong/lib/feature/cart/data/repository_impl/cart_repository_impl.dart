@@ -26,7 +26,7 @@ class CartRepositoryImpl implements CartRepository {
   }
   
   @override
-  Future<void> updateQuantity(int cartItemId, int newQuantity) {
-    throw UnimplementedError();
+  Future<void> updateQuantity(int cartItemId, int quantity) {
+    return remoteDataSource.updateQuantity(cartItemId, quantity);
   }
 }

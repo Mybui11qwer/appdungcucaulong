@@ -80,6 +80,23 @@ export class CartRepository {
     return result.recordset;
   }
 
+  async updateQuantity(cartItemId: number, quantity: number) {
+    const pool = await Database.getInstance();
+
+    const result = await pool
+      .request()
+      .input("cartItemId", cartItemId)
+      .input("quantity", quantity)
+      .query(`
+        UPDATE CartItem
+        SET Quantity = @quantity
+        WHERE ID_CartItem = @cartItemId;
+
+        SELECT * FROM CartItem WHERE ID_CartItem = @cartItemId
+      `);
+    return result.recordset[0];
+  }
+
   async removeFromCart(cartItemId: number) {
     const pool = await Database.getInstance();
 

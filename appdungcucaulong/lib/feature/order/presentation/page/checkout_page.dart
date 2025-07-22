@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/network/api_constants.dart';
 import '../../../cart/domain/entity/cart_item_entity.dart';
 import '../../../order/domain/usecase/create_order_usecase.dart';
 import '../../../order/domain/di/order_injection.dart' show sl;
@@ -14,8 +15,10 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  final _nameController = TextEditingController();
   final _addressController = TextEditingController();
-  String _paymentMethod = 'Tiền mặt';
+  final _noteController = TextEditingController();
+  String _paymentMethod = 'Momo';
 
   bool _isLoading = false;
 
@@ -37,13 +40,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final customerId = prefs.getInt('customerId');
-      print("Customer ID: $customerId");
 
       if (customerId == null || customerId == 0) {
         throw Exception("Không tìm thấy tài khoản khách hàng");
       }
 
-      // Tạo list product object (dạng map)
       final products = widget.cartItems.map((item) {
         return {
           'productId': item.productId,
@@ -64,7 +65,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       );
 
       if (!mounted) return;
-      Navigator.pop(context); // về lại sau khi đặt xong
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("✅ Đặt hàng thành công (ID: ${order.id})")),
       );
@@ -80,50 +81,196 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Thanh toán")),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
+      backgroundColor: const Color(0xFFf4efef),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Sản phẩm", style: Theme.of(context).textTheme.titleMedium),
-            ...widget.cartItems.map((item) => ListTile(
-                  title: Text(item.productName),
-                  subtitle: Text("SL: ${item.quantity} x ${item.price}"),
-                )),
-            const Divider(),
-            TextField(
-              controller: _addressController,
-              decoration: const InputDecoration(labelText: "Địa chỉ giao hàng"),
-            ),
-            DropdownButtonFormField<String>(
-              value: _paymentMethod,
-              items: ['Tiền mặt', 'Chuyển khoản']
-                  .map((method) => DropdownMenuItem(
-                        value: method,
-                        child: Text(method),
-                      ))
-                  .toList(),
-              onChanged: (value) => setState(() => _paymentMethod = value!),
-              decoration:
-                  const InputDecoration(labelText: "Phương thức thanh toán"),
-            ),
-            const SizedBox(height: 16),
-            Text("Tổng tiền: ${total.toStringAsFixed(0)} đ",
-                style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _checkout,
-                child: _isLoading
-                    ? const CircularProgressIndicator()
-                    : const Text("Đặt hàng"),
+            Container(
+              color: const Color(0xFF0e3e8a),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      "Checkout Order",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.arrow_back_ios_new, size: 16),
+                    ),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 12),
+            ...widget.cartItems.map(
+              (item) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                        ),
+                        child: Image.network(
+                          '${ApiConstants.baseUrl}/public/images/${item.image}',
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.productName,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF0e3e8a),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text("${item.price.toStringAsFixed(0)}\$"),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0e3e8a),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                        child: Text(
+                          item.quantity.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const Text(
+                        "ORDER FORM",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF0e3e8a),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildInputField("Name", _nameController),
+                      const SizedBox(height: 8),
+                      _buildInputField("Location", _addressController),
+                      const SizedBox(height: 8),
+                      _buildInputField("Note", _noteController),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: [
+                          RadioListTile<String>(
+                            title: const Text("Momo"),
+                            value: "Momo",
+                            groupValue: _paymentMethod,
+                            onChanged: (value) {
+                              setState(() => _paymentMethod = value!);
+                            },
+                          ),
+                          RadioListTile<String>(
+                            title: const Text("COD"),
+                            value: "COD",
+                            groupValue: _paymentMethod,
+                            onChanged: (value) {
+                              setState(() => _paymentMethod = value!);
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total Money: ${total.toStringAsFixed(0)} \$"),
+                          Text("Total Products: ${widget.cartItems.length}"),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF0e3e8a),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: _isLoading ? null : _checkout,
+                          child: _isLoading
+                              ? const CircularProgressIndicator(color: Colors.white)
+                              : const Text("CHECKOUT", style: TextStyle(color: Colors.white)),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildInputField(String hint, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hint,
+        filled: true,
+        fillColor: const Color(0xFF0e3e8a),
+        hintStyle: const TextStyle(color: Colors.white),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      style: const TextStyle(color: Colors.white),
     );
   }
 }

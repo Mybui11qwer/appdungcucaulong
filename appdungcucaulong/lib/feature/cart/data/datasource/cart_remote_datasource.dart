@@ -59,4 +59,17 @@ class CartRemoteDataSource {
       throw Exception('Failed to remove from cart: ${response.body}');
     }
   }
+
+  Future<void> updateQuantity(int cartItemId, int quantity) async {
+    final headers = await _buildHeaders();
+    final response = await client.put(
+      Uri.parse(ApiConstants.updateCartQuantity),
+      headers: headers,
+      body: jsonEncode({'cartItemId': cartItemId, 'quantity': quantity}),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update quantity: ${response.body}');
+    }
+  }
 }

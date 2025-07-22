@@ -20,6 +20,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<AddToCartEvent>((event, emit) async {
+      emit(CartLoading());
       try {
         await cartRepository.addToCart(event.dto);
         final items = await getCartUseCase();
@@ -41,10 +42,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     });
 
     on<UpdateQuantityEvent>((event, emit) async {
+      emit(CartLoading());
       try {
-        // Gọi service để update quantity (tuỳ vào cách bạn lưu cart)
-        await cartRepository.updateQuantity(event.productId, event.quantity);
-        final items = await cartRepository.getCart();
+        await cartRepository.updateQuantity(event.cartItemId, event.quantity);
+        final items = await getCartUseCase();
         emit(CartLoaded(items));
       } catch (e) {
         emit(CartError("Lỗi khi cập nhật số lượng"));

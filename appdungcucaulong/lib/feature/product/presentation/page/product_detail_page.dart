@@ -4,6 +4,7 @@ import '../../../../core/network/api_constants.dart';
 import '../../../cart/data/dto/request/add_to_cart_dto.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
+import '../../../cart/presentation/widget/cart_top_sheet.dart';
 import '../../domain/entity/product_entity.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -21,9 +22,21 @@ class ProductDetailPage extends StatelessWidget {
           Stack(
             clipBehavior: Clip.none,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 300,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text("Thông tin sản phẩm..."),
+                    ],
+                  ),
+                ),
+              ),
               Container(
                 color: Colors.blue[900], // nền xanh đậm phía trên
-                height: 250,
+                height: 300,
                 width: double.infinity,
               ),
               SafeArea(
@@ -50,6 +63,22 @@ class ProductDetailPage extends StatelessWidget {
                 ),
               ),
               Positioned(
+                top: 40,
+                right: 16,
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.shopping_cart,
+                      color: Color(0xFF0047AB),
+                    ),
+                    onPressed: () {
+                      showCartTopSheet(context);
+                    },
+                  ),
+                ),
+              ),
+              Positioned(
                 top: 60,
                 left: 0,
                 right: 0,
@@ -63,7 +92,7 @@ class ProductDetailPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                top: 240,
+                top: 280,
                 left: 16,
                 right: 16,
                 child: Container(
@@ -107,7 +136,7 @@ class ProductDetailPage extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 80), // khoảng trống sau phần card
+          const SizedBox(height: 150), // khoảng trống sau phần card
           // Phần danh sách sản phẩm liên quan
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -115,11 +144,11 @@ class ProductDetailPage extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               child: Container(
-                height: 100,
+                height: 120,
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage('${ApiConstants.baseUrl}/public/images/sample_racket_bg.jpg'), // background ví dụ
+                    image: NetworkImage('assets/images/Green_BG.png'), // background ví dụ
                     fit: BoxFit.cover,
                     // ignore: deprecated_member_use
                     colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
@@ -132,8 +161,8 @@ class ProductDetailPage extends StatelessWidget {
                       height: 64,
                       color: Colors.white,
                       child: Center(
-                        child: Image.network(
-                          'https://upload.wikimedia.org/wikipedia/commons/7/73/Yonex_logo.svg',
+                        child: Image.asset(
+                          'images/Yonex.png',
                           fit: BoxFit.contain,
                           width: 48,
                           height: 48,

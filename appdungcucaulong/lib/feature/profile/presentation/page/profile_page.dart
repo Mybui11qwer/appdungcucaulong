@@ -4,15 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/network/api_constants.dart';
 import '../../../auth/presentation/page/login_page.dart';
+import '../../../order/domain/usecase/get_order_detail_usecase.dart';
+import '../../../order/domain/usecase/get_orders_by_customer_usecase.dart';
+import '../../../order/presentation/bloc/bloc_event.dart';
+import '../../../order/presentation/bloc/checkout_bloc.dart';
+import '../../../order/presentation/page/order_history_page.dart';
 import '../../domain/di/profile_injection.dart';
 import '../../domain/entity/user_entity.dart';
 import '../bloc/profile_bloc.dart';
+import '../../../product/domain/usecase/get_all_products_usecase.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final getOrdersByCustomerUseCase = sl<GetOrdersByCustomerUseCase>();
+    final getOrderDetailUseCase = sl<GetOrderDetailUseCase>();
     return BlocProvider(
       create: (_) => sl<ProfileBloc>()..add(LoadUserProfileEvent()),
       child: BlocBuilder<ProfileBloc, ProfileState>(
@@ -73,8 +81,55 @@ class UserProfilePage extends StatelessWidget {
                             mainAxisSpacing: 16,
                             crossAxisSpacing: 16,
                             children: [
-                              _buildStatCard('24', 'Favourite', Colors.orange, Icons.favorite_border),
-                              _buildStatCard('4', 'Orders', Colors.blue, Icons.shopping_cart),
+                              _buildStatCard(
+                                '4',
+                                'Orders',
+                                Colors.blue,
+                                Icons.shopping_cart,
+                                onTap: () async {
+                                  final customerId = user.id;
+                                  final getAllProductsUsecase =
+                                      sl<GetAllProductsUsecase>();
+                                  try {
+                                    final allProducts =
+                                        await getAllProductsUsecase();
+
+                                    Navigator.push(
+                                      // ignore: use_build_context_synchronously
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (_) => BlocProvider(
+                                              create:
+                                                  (_) => OrderHistoryBloc(
+                                                    getOrdersByCustomerUseCase,
+                                                    getOrderDetailUseCase,
+                                                  )..add(
+                                                    FetchOrderHistory(
+                                                      customerId,
+                                                    ),
+                                                  ),
+                                              child: OrderHistoryPage(
+                                                allProducts: allProducts,
+                                              ),
+                                            ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    debugPrint(
+                                      "Lỗi khi tải danh sách sản phẩm: $e",
+                                    );
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Không thể tải danh sách sản phẩm",
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
                               _buildStatCard('24', 'Runs', Colors.purple, Icons.directions_run),
                               _buildStatCard('10', 'Levels', Colors.lightBlue, Icons.bolt),
                             ],
@@ -113,42 +168,34 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard(String count, String label, Color color, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.3),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(16),
-                  bottomLeft: Radius.circular(50),
-                ),
-              ),
+  Widget _buildStatCard(
+    String count,
+    String title,
+    Color color,
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          // ignore: deprecated_member_use
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 32),
+            const SizedBox(height: 8),
+            Text(
+              count,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: color),
-              const SizedBox(height: 12),
-              Text(
-                count,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              Text(label),
-            ],
-          ),
-        ],
+            Text(title, style: const TextStyle(color: Colors.black54)),
+          ],
+        ),
       ),
     );
   }
@@ -161,16 +208,17 @@ class UserProfilePage extends StatelessWidget {
         leading: Icon(icon),
         title: Text(title),
         trailing: const Icon(Icons.keyboard_arrow_down),
-        onTap: onTap, // Gọi hàm truyền vào
+        onTap: onTap,
       ),
     );
   }
 
   Future<void> _logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // hoặc prefs.remove('token');
+    await prefs.clear();
 
     Navigator.pushAndRemoveUntil(
+      // ignore: use_build_context_synchronously
       context,
       MaterialPageRoute(builder: (_) => LoginPage()),
       (route) => false,

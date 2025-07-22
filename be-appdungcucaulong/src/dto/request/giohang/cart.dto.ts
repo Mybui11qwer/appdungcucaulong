@@ -7,3 +7,9 @@ export interface AddToCartDTO {
 export interface RemoveFromCartDTO {
   cartItemId: number;
 }
+
+export interface UpdateQuantityDTO {  
+  cartItemId: number;
+  quantity: number;
+}
+

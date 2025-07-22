@@ -44,7 +44,6 @@ class OrderDto {
       saleId: saleId,
       paymentMethod: paymentMethod,
       shippingAddress: shippingAddress,
-      items: [],
     );
   }
 
@@ -52,7 +51,7 @@ class OrderDto {
     return OrderDto.fromJson(json);
   }
 
-  OrderEntity toEntityWithItems(int orderId, [List<OrderItemEntity> items = const []]) {
+  OrderEntity toEntityWithItems(int orderId) {
     return OrderEntity(
       id: orderId,
       customerId: customerId,
@@ -62,7 +61,6 @@ class OrderDto {
       saleId: saleId,
       paymentMethod: paymentMethod,
       shippingAddress: shippingAddress,
-      items: items,
     );
   }
 }

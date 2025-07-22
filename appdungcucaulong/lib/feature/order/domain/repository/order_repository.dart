@@ -1,3 +1,5 @@
+import 'package:appdungcucaulong/feature/order/domain/entity/order_detail_entity.dart';
+
 import '../entity/order_entity.dart';
 
 abstract class OrderRepository {
@@ -12,5 +14,5 @@ abstract class OrderRepository {
 
   Future<List<OrderEntity>> getOrdersByCustomer(int customerId);
 
-  Future<OrderEntity> getOrderDetail(int orderId);
+  Future<List<OrderItemEntity>> getOrderDetails(int orderId);
 }

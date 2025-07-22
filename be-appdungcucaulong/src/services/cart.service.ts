@@ -1,5 +1,5 @@
 import { CartRepository } from "../repositories/cart.repository";
-import { AddToCartDTO, RemoveFromCartDTO } from "../dto/request/giohang/cart.dto";
+import { AddToCartDTO, RemoveFromCartDTO, UpdateQuantityDTO } from "../dto/request/giohang/cart.dto";
 
 export class CartService {
   private repo = new CartRepository();
@@ -11,6 +11,11 @@ export class CartService {
 
   async getCartByCustomerId(customerId: number) {
     return this.repo.getCartItemsByCustomer(customerId);
+  }
+
+  async updateQuantity(customerId: number, dto: UpdateQuantityDTO) {
+  // Optional: Verify item belongs to customer's cart
+  return this.repo.updateQuantity(dto.cartItemId, dto.quantity);
   }
 
   async removeFromCart(customerId: number, dto: RemoveFromCartDTO) {

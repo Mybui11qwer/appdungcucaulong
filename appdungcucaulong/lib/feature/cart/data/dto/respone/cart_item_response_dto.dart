@@ -1,5 +1,5 @@
 class CartItemResponseDTO {
-  final int id;
+  final int cartItemId;
   final int productId;
   final int sizeId;
   final int quantity;
@@ -9,7 +9,7 @@ class CartItemResponseDTO {
   final String sizeName;
 
   CartItemResponseDTO({
-    required this.id,
+    required this.cartItemId,
     required this.productId,
     required this.sizeId,
     required this.quantity,
@@ -21,7 +21,7 @@ class CartItemResponseDTO {
 
   factory CartItemResponseDTO.fromJson(Map<String, dynamic> json) =>
       CartItemResponseDTO(
-        id: json['ID_CartItem'],
+        cartItemId: json['ID_CartItem'],
         productId: json['ID_Product'],
         sizeId: json['ID_Size'],
         quantity: json['Quantity'],

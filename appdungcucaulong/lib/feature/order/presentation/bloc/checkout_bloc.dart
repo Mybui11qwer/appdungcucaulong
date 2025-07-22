@@ -1,7 +1,11 @@
+import 'package:appdungcucaulong/feature/order/presentation/bloc/bloc_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/entity/order_entity.dart';
 import '../../domain/usecase/create_order_usecase.dart';
+import '../../domain/usecase/get_order_detail_usecase.dart';
+import '../../domain/usecase/get_orders_by_customer_usecase.dart';
+import 'bloc_event.dart';
 
 sealed class CheckoutEvent {}
 
@@ -61,3 +65,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     });
   }
 }
+
+class OrderHistoryBloc extends Bloc<OrderHistoryEvent, OrderHistoryState> {
+  final GetOrdersByCustomerUseCase getOrdersByCustomerUseCase;
+  final GetOrderDetailUseCase getOrderDetailUseCase;
+
+  OrderHistoryBloc(
+    this.getOrdersByCustomerUseCase,
+    this.getOrderDetailUseCase,
+  ) : super(OrderHistoryInitial()) {
+    on<FetchOrderHistory>((event, emit) async {
+      emit(OrderHistoryLoading());
+      try {
+        final orders = await getOrdersByCustomerUseCase(event.customerId);
+        emit(OrderHistoryLoaded(orders));
+      } catch (e) {
+        emit(OrderHistoryError(e.toString()));
+      }
+    });
+  }
+}
+

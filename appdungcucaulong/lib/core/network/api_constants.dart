@@ -1,5 +1,6 @@
 class ApiConstants {
-  static const IPUrl = '10.21.14.25';
+  // ignore: constant_identifier_names
+  static const IPUrl = '192.168.4.10';
   static const baseUrl = 'http://$IPUrl:3000/api';
   //auth
   static const login = '$baseUrl/login';
@@ -12,6 +13,7 @@ class ApiConstants {
   //cart
   static const getCart = '$baseUrl/cart';
   static const addToCart = '$baseUrl/cart/add';
+  static const updateCartQuantity = '$baseUrl/cart/updateQuantity';
   static const removeFromCart = '$baseUrl/cart/remove';
 
   //profile

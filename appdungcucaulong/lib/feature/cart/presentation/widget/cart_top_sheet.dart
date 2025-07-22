@@ -28,8 +28,8 @@ void showCartTopSheet(BuildContext context) {
             child: SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               width: double.infinity,
-              child: BlocProvider.value(
-                value: sl<CartBloc>()..add(LoadCartEvent()),
+              child: BlocProvider(
+                create: (_) => sl<CartBloc>()..add(LoadCartEvent()),
                 child: _CartPanel(),
               ),
             ),
@@ -136,7 +136,7 @@ class _CartPanel extends StatelessWidget {
                                         icon: Icon(Icons.remove_circle, color: Colors.blue),
                                         onPressed: () {
                                           if (item.quantity > 1) {
-                                            context.read<CartBloc>().add(UpdateQuantityEvent(item.productId, item.quantity - 1));
+                                            context.read<CartBloc>().add(UpdateQuantityEvent(item.cartItemId, item.quantity - 1));
                                           }
                                         },
                                       ),
@@ -144,7 +144,21 @@ class _CartPanel extends StatelessWidget {
                                       IconButton(
                                         icon: Icon(Icons.add_circle, color: Colors.blue),
                                         onPressed: () {
-                                          context.read<CartBloc>().add(UpdateQuantityEvent(item.productId, item.quantity + 1));
+                                          context.read<CartBloc>().add(UpdateQuantityEvent(item.cartItemId, item.quantity + 1));
+                                        },
+                                      ),
+
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          context.read<CartBloc>().add(
+                                            RemoveFromCartEvent(
+                                              item.cartItemId,
+                                            ),
+                                          );
                                         },
                                       ),
                                     ],

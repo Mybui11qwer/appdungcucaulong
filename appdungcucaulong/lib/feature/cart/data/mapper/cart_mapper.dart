@@ -3,7 +3,7 @@ import '../dto/respone/cart_item_response_dto.dart';
 
 extension CartItemMapper on CartItemResponseDTO {
   CartItemEntity toEntity() => CartItemEntity(
-        id: id,
+        cartItemId: cartItemId,
         productId: productId,
         sizeId: sizeId,
         quantity: quantity,
