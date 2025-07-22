@@ -29,6 +29,7 @@ class BadmintonApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
+        visualDensity: VisualDensity.adaptivePlatformDensity // tự động căn chỉnh hiển thị tối ưu cho từng thiết bị
       ),
       debugShowCheckedModeBanner: false,
       home: const SplashWrapper(),
