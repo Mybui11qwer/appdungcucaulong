@@ -1,292 +1,469 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/network/api_constants.dart';
+//import '../../../cart/data/dto/request/add_to_cart_dto.dart';
+//import '../../../cart/presentation/bloc/cart_bloc.dart';
+//import '../../../cart/presentation/bloc/cart_event.dart';
+//import '../../../cart/presentation/widget/cart_top_sheet.dart';
 import '../../../cart/data/dto/request/add_to_cart_dto.dart';
 import '../../../cart/presentation/bloc/cart_bloc.dart';
 import '../../../cart/presentation/bloc/cart_event.dart';
 import '../../../cart/presentation/widget/cart_top_sheet.dart';
 import '../../domain/entity/product_entity.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetailPage extends StatefulWidget {
   final ProductEntity product;
   final int productId;
 
-  const ProductDetailPage({super.key, required this.product, required this.productId});
+  const ProductDetailPage({
+    super.key,
+    required this.product,
+    required this.productId,
+  });
+  @override
+  State<ProductDetailPage> createState() => _ProductDetailPageState();
+}
+
+class _ProductDetailPageState extends State<ProductDetailPage> {
+  final GlobalKey _content4Key = GlobalKey();
+
+  void _scrollToContent4() {
+    final ctx = _content4Key.currentContext;
+    if (ctx != null) {
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
+      backgroundColor: Colors.transparent,
+      body: Stack(
         children: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 300,
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text("Thông tin sản phẩm..."),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                color: Colors.blue[900], // nền xanh đậm phía trên
-                height: 300,
-                width: double.infinity,
-              ),
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      const Expanded(
-                        child: Text(
-                          "Chi tiết sản phẩm",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(width: 48),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 40,
-                right: 16,
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.shopping_cart,
-                      color: Color(0xFF0047AB),
-                    ),
-                    onPressed: () {
-                      showCartTopSheet(context);
-                    },
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 60,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Image.network(
-                    '${ApiConstants.baseUrl}/public/images/${product.image}',
-                    height: 200,
-                    fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image, size: 80, color: Colors.white),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 280,
-                left: 16,
-                right: 16,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[300],
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(text: "Material: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: "Plastic"),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(text: "Variant: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: "Black, White, Orange"),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(text: "Description: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                            TextSpan(text: "Black, White, Orange"),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 150), // khoảng trống sau phần card
-          // Phần danh sách sản phẩm liên quan
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Card(
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              child: Container(
-                height: 120,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage('assets/images/Green_BG.png'), // background ví dụ
-                    fit: BoxFit.cover,
-                    // ignore: deprecated_member_use
-                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.4), BlendMode.darken),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 64,
-                      height: 64,
-                      color: Colors.white,
-                      child: Center(
-                        child: Image.asset(
-                          'images/Yonex.png',
-                          fit: BoxFit.contain,
-                          width: 48,
-                          height: 48,
-                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.image_not_supported),
-                        ),
+            padding: EdgeInsets.only(top: 245),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Column(
+                children: [
+                  //Content 1
+                  SizedBox(height: 30),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Warm and Clean',
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Color.fromARGB(255, 1, 94, 255),
+                        fontWeight: FontWeight.bold,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Our product ensures you experience the perfect balance of warmth and comfort, keeping you cozy while maintaining freshness, no matter the environment.',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  //Content 2
+                  const SizedBox(height: 100),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Easy Washing',
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Color.fromARGB(255, 1, 94, 255),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Our product ensures you experience the perfect balance of warmth and comfort, keeping you cozy while maintaining freshness, no matter the environment.',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  //Content 3
+                  const SizedBox(height: 100),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Guard Safe',
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: Color.fromARGB(255, 1, 94, 255),
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Our product ensures you experience the perfect balance of warmth and comfort, keeping you cozy while maintaining freshness, no matter the environment.',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+                  //Content 4
+                  const SizedBox(height: 50),
+                  Padding(
+                    key: _content4Key,
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1E58D6), Color(0xFF3A7BD5)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Yonex",
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          const SizedBox(height: 4),
                           Text(
-                            "Hcm, VN",
-                            style: TextStyle(color: Colors.white70),
+                            widget.product.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                           const SizedBox(height: 8),
-                          Wrap(
-                            spacing: 8,
-                            children: [
-                              _buildTag("Racket"),
-                              _buildTag("Gear"),
-                              _buildTag("Racket"),
+                          Row(
+                            children:  [
+                              Icon(Icons.credit_card, color: Colors.white),
+                              SizedBox(width: 8),
+                              Text(
+                                '${widget.product.price} vnđ',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Material: Plastic, WOOL',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Variant: Black, White, Orage',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'Description: Black, White, Orage',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border, color: Colors.white),
-                      onPressed: () {},
+                  ),
+
+                  //Content 5
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      height: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                          image: AssetImage('/images/badminton_bg.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          // Icon yêu thích ở góc trên phải
+                          Positioned(
+                            top: 12,
+                            right: 12,
+                            child: Icon(
+                              Icons.favorite_border,
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          // Logo và thông tin bên trái
+                          Positioned(
+                            top: 16,
+                            left: 16,
+                            child: Row(
+                              children: [
+                                // Logo
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    'assets/images/yonex.png',
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                // Text
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      'Yonex',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Hcm, VN',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Tags dưới cùng
+                          Positioned(
+                            bottom: 16,
+                            left: 16,
+                            right: 16,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: const [
+                                _TagChip(label: 'Racket'),
+                                _TagChip(label: 'Gear'),
+                                _TagChip(label: 'Racket'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 10),
+                ],
               ),
             ),
           ),
-          const Spacer(),
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildBottomNavIcon(
-                  Icons.info,
-                  false,
-                  onTap: () {
-                  },
+          ClipPath(
+            clipper: BottomCurveClipper(),
+            child: Container(
+              height: 300,
+              color: Color(0xFF3A7BD5),
+              alignment: Alignment.center,
+              child: Image.network(
+                '${ApiConstants.baseUrl}/public/images/lening.png',
+                height: 200,
+              ),
+            ),
+          ),
+          // Icon tròn giữa cố định
+          Positioned(
+            top: 240,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 6)],
                 ),
-                _buildBottomNavIcon(
-                  Icons.favorite,
-                  true,
-                  onTap: () {
-                  },
+                child: Icon(Icons.layers, size: 32, color: Color(0xFF103F91)),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 30,
+            left: 16,
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
                 ),
-                _buildBottomNavIcon(
-                  Icons.share,
-                  false,
-                  onTap: () {
-                  },
-                ),
-                _buildBottomNavIcon(
-                  Icons.shopping_bag_outlined,
-                  false,
-                  onTap: () {
-                  },
-                ),
-                _buildBottomNavIcon(
-                  Icons.shopping_cart,
-                  false,
-                  onTap: () {
-                    final dto = AddToCartDTO(
-                      productId: product.id,
-                      sizeId: 1,
-                      quantity: 1,
-                    );
-
-                    context.read<CartBloc>().add(AddToCartEvent(dto));
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Đã thêm vào giỏ hàng")),
-                    );
-                  },
-                ),
-              ],
+                child: Icon(Icons.arrow_back, size: 24, color: Color.fromARGB(255, 0, 0, 0)),
+              ),
             ),
           ),
         ],
       ),
+      //SideBar
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0x3F0872FD),
+                blurRadius: 4,
+                offset: const Offset(4, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _ActionBox(
+                color: Color(0xFF103F91),
+                icon: Icons.info,
+                onTap: _scrollToContent4,
+              ),
+              _ActionBox(
+                color: Color(0xFF788AFF),
+                icon: Icons.favorite,
+                onTap: null,
+              ),
+              _ActionBox(
+                color: Color(0xFF82A8FB),
+                icon: Icons.share,
+                onTap: null,
+              ),
+              _ActionBox(
+                color: Color(0xFF999191),
+                icon: Icons.shopping_bag,
+                onTap: () {
+                  showCartTopSheet(context);
+                },
+              ),
+              _ActionBox(
+                color: Color(0xFF4D4350),
+                icon: Icons.shopping_cart,
+                onTap: () {
+                  final dto = AddToCartDTO(
+                    productId: widget.product.id,
+                    sizeId: 1,
+                    quantity: 1,
+                  );
+
+                  context.read<CartBloc>().add(AddToCartEvent(dto));
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Đã thêm vào giỏ hàng")),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
+}
 
-  Widget _buildTag(String text) {
+class BottomCurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height - 60);
+    path.quadraticBezierTo(
+      size.width / 2,
+      size.height,
+      size.width,
+      size.height - 60,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class _TagChip extends StatelessWidget {
+  final String label;
+
+  const _TagChip({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white54,
+        color: Colors.white.withOpacity(0.3),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(text, style: const TextStyle(color: Colors.black)),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
+}
 
-  Widget _buildBottomNavIcon(
-    IconData icon,
-    bool active, {
-    VoidCallback? onTap,
-  }) {
+class _ActionBox extends StatelessWidget {
+  final Color color;
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  const _ActionBox({
+    required this.color,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
-          color: active ? Colors.purple[300] : Colors.grey[300],
-          borderRadius: BorderRadius.circular(12),
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0x3F000000),
+              blurRadius: 4,
+              offset: const Offset(2, 2),
+            ),
+          ],
         ),
-        child: Icon(icon, color: active ? Colors.white : Colors.black54),
+        child: Center(child: Icon(icon, color: Colors.white)),
       ),
     );
   }

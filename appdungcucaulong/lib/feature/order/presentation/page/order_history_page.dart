@@ -87,12 +87,10 @@ class OrderHistoryPage extends StatelessWidget {
                 image: "lening.png",
               ),
         );
-        print("Matching productId: ${firstItem.productId}");
-        print("All product IDs: ${allProducts.map((p) => p.id).toList()}");
 
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -102,7 +100,7 @@ class OrderHistoryPage extends StatelessWidget {
             children: [
               Image.network(
                 '${ApiConstants.baseUrl}/public/images/${product.image}',
-                width: 70,
+                width: 100,
                 height: 100,
                 fit: BoxFit.cover,
               ),
@@ -111,6 +109,13 @@ class OrderHistoryPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      "Ngày đặt",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                     Text(
                       "${product.name}\n${order.total.toStringAsFixed(0)}\$",
                       style: const TextStyle(

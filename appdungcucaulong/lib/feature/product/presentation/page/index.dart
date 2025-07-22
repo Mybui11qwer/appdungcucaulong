@@ -15,9 +15,10 @@ class IndexPage extends StatelessWidget {
 
   Widget _circleIcon(IconData icon) {
     return Container(
-      decoration: BoxDecoration(color: Colors.blueAccent, shape: BoxShape.circle),
-      padding: const EdgeInsets.all(10),
-      child: Icon(icon, color: Colors.white, size: 24),
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+      child: Icon(icon, color: Color(0xFF1A3C6B), size: 24),
     );
   }
 
@@ -41,7 +42,7 @@ class IndexPage extends StatelessWidget {
 
           // Logo + Title
           Positioned(
-            top: 25,
+            top: 20,
             left: 20,
             right: 20,
             child: Column(

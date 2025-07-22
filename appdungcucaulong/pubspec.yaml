@@ -71,8 +71,8 @@ flutter:
   assets:
     - assets/images/badminton_mascot.png
     - assets/images/banner.png
-    - assets/images/Green_BG.png
-    - assets/images/Yonex.png
+    - assets/images/badminton_bg.png
+    - assets/images/yonex.png
     - assets/introImages/intro1.png
     - assets/introImages/intro2.png
     - assets/introImages/intro3.png

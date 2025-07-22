@@ -28,12 +28,12 @@ class EmptyStateWidget extends StatelessWidget {
           Column(
             children: [
               Container(
-                height: 120,
+                height: 90,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF0047AB),
+                  color: Color(0xFF1A3C6B),
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(60),
-                    bottomRight: Radius.circular(60),
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
                   ),
                 ),
               ),
@@ -51,12 +51,12 @@ class EmptyStateWidget extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: 40,
-            right: 16,
+            top: 25,
+            right: 18,
             child: CircleAvatar(
-              backgroundColor: Colors.white,
+              backgroundColor: Color.fromARGB(255, 255, 255, 255),
               child: IconButton(
-                icon: const Icon(Icons.shopping_cart, color: Color(0xFF0047AB)),
+                icon: const Icon(Icons.shopping_cart_outlined, color:Color(0xFF1A3C6B)),
                 onPressed: () {
                   showCartTopSheet(context);
                 },
