@@ -1,10 +1,8 @@
-import 'package:appdungcucaulong/config/shared/widget/main_scaffold.dart';
+
+import 'package:appdungcucaulong/feature/product/presentation/components/add_to_cart_section.dart';
+import 'package:appdungcucaulong/feature/product/presentation/components/product_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/network/api_constants.dart';
-import '../../../cart/data/dto/request/add_to_cart_dto.dart';
-import '../../../cart/presentation/bloc/cart_bloc.dart';
-import '../../../cart/presentation/bloc/cart_event.dart';
 import '../../domain/entity/product_entity.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -13,89 +11,53 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      currentIndex: 0,
+    return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          SafeArea(
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context); 
-                  },
-                ),
-                const Expanded(
-                  child: Text(
-                    "Chi tiết sản phẩm",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(width: 48), 
-              ],
-            ),
-          ),
           Expanded(
-            child: SingleChildScrollView(
+            child: Container(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.network(
-                    '${ApiConstants.baseUrl}/public/images/${product.image}',
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                  Stack(
+                    children: [
+                      Positioned(
+                        child: SizedBox(
+                          height: 300,
+                          child: Image.network(
+                            '${ApiConstants.baseUrl}/public/images/${product.image}',
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image),
+                          ),
+                        ),),
+                      Positioned(
+                        top: 0,
+                        left: 10,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            padding: const EdgeInsets.only(left: 4),
+                            color: Colors.blueGrey,
+                            child: IconButton(onPressed: (){
+                               Navigator.pop(context);
+                            }, icon: Icon(Icons.arrow_back_ios, color: Colors.white,)),
+                          ),
+                        ))
+                    ],
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    product.name,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "${product.price.toStringAsFixed(0)} đ",
-                    style: const TextStyle(fontSize: 18, color: Colors.blue),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    product.description.isNotEmpty ? product.description : "Không có mô tả.",
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 80),
+                  ProductContent(product: product)
                 ],
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                final dto = AddToCartDTO(
-                  productId: product.id,
-                  sizeId: 1,
-                  quantity: 1,
-                );
-
-                context.read<CartBloc>().add(AddToCartEvent(dto));
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Đã thêm vào giỏ hàng")),
-                );
-              },
-              icon: const Icon(Icons.add_shopping_cart),
-              label: const Text("Thêm vào giỏ hàng"),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                backgroundColor: Colors.green,
-              ),
-            ),
-          ),
+          AddToCartSection(id: product.id, price:  product.price, )
         ],
       ),
     );

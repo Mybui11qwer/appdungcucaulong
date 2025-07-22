@@ -12,7 +12,11 @@ import 'product_detail_page.dart';
 class ProductPage extends StatelessWidget {
   final int productId;
 
-  const ProductPage({super.key, required this.productId, required int customerId});
+  const ProductPage({
+    super.key,
+    required this.productId,
+    required int customerId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +47,10 @@ class ProductPage extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('assets/images/badminton_mascot.png', height: 50),
+                    Image.asset(
+                      'assets/images/badminton_mascot.png',
+                      height: 50,
+                    ),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -96,9 +103,10 @@ class ProductPage extends StatelessWidget {
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       physics: const BouncingScrollPhysics(),
-                      children: products
-                          .map((product) => ProductCard(product: product))
-                          .toList(),
+                      children:
+                          products
+                              .map((product) => ProductCard(product: product))
+                              .toList(),
                     );
                   } else if (state is ProductError) {
                     return Center(child: Text("Lỗi: ${state.message}"));
@@ -126,7 +134,9 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailPage(productId: product.id, product: product),
+            builder:
+                (context) =>
+                    ProductDetailPage(productId: product.id, product: product),
           ),
         );
       },

@@ -1,5 +1,9 @@
+import 'package:appdungcucaulong/feature/notifications/presentation/page/notification_page.dart';
+import 'package:appdungcucaulong/feature/product/presentation/page/shop_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'feature/auth/domain/di/auth_injection.dart';
 import 'feature/cart/domain/di/cart_injection.dart';
 import 'feature/cart/presentation/bloc/cart_bloc.dart';
@@ -24,14 +28,28 @@ class BadmintonApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    //Đặt chế độ hiển thị là dọc
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    //Ẩn đi các thanh trạng thái và thanh điều hướng
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    
+    return GetMaterialApp(
       title: 'Badminton App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
+        primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity // tự động căn chỉnh hiển thị tối ưu cho từng thiết bị
       ),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/home': (context) => SplashWrapper(),
+        '/notification': (context) => NotificationPage(),
+        '/product': (context) => ShopPage(),
+      },
       home: const SplashWrapper(),
     );
   }

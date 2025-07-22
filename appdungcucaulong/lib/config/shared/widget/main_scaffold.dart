@@ -37,13 +37,13 @@ class _MainScaffoldState extends State<MainScaffold> {
       case 0:
         Navigator.pushReplacementNamed(context, '/home');
         break;
-      case 1:
+      case 3:
         Navigator.pushReplacementNamed(context, '/notification');
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/favorites');
         break;
-      case 3:
+      case 1:
         Navigator.pushReplacementNamed(context, '/product');
         break;
       case 4:
@@ -51,29 +51,27 @@ class _MainScaffoldState extends State<MainScaffold> {
         break;
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       drawer: const SidebarWidget(),
       body: widget.body,
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: Colors.blue, //const Color(0xFF0D47A1),
         activeColor: Colors.white,
-        color: Colors.blue,
+        color: Colors.white,
         initialActiveIndex: _selectedIndex,
         style: TabStyle.react,
         onTap: _onTap,
         items: const [
-          TabItem(icon: Icons.home),
-          TabItem(icon: Icons.notifications),
-          TabItem(icon: Icons.bookmark),
-          TabItem(icon: Icons.apps),
-          TabItem(icon: Icons.person),
+          TabItem(icon: Icons.home), // trang chủ
+          TabItem(icon: Icons.apps),// shopscreen
+          TabItem(icon: Icons.notifications), // thông báo
+          TabItem(icon: Icons.bookmark), // danh sách yêu thích
+          TabItem(icon: Icons.person), // thông tin cá  nhân
         ],
       ),
     );
   }
 }
-
-

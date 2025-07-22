@@ -1,7 +1,6 @@
 import 'package:appdungcucaulong/const/raw.dart';
 import 'package:flutter/material.dart';
 import 'package:appdungcucaulong/class/index.dart';
-import 'package:appdungcucaulong/components/custom-grid-view/index.dart';
 import 'package:appdungcucaulong/components/parralel-text/index.dart';
 import 'package:appdungcucaulong/components/product-card/index.dart';
 
@@ -23,7 +22,7 @@ class TopSellerSection extends StatelessWidget {
         children: [
           ParrallelText(text1: 'Best Seller', text2: 'View All'),
           SizedBox(height: 15),
-          Container(
+          SizedBox(
             height: 600, // Đặt chiều cao cho GridView
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(),

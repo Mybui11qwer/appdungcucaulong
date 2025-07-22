@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomTitle extends StatelessWidget {
   final String text;
   final Color? color;
+  final int? MaxLine;    
   final double? txtSize;
   final TextStyle? textStyle;
   final TextAlign? textAlign;
@@ -16,7 +17,7 @@ class CustomTitle extends StatelessWidget {
     this.textStyle,
     this.textAlign,
     this.fontWeight,
-    required this.text,
+    required this.text, this.MaxLine,
   });
 
   @override
@@ -24,6 +25,9 @@ class CustomTitle extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign,
+      softWrap: true,
+      maxLines: MaxLine ?? 2,
+      overflow: TextOverflow.fade,
       style:
           textStyle ??
           GoogleFonts.poppins(
