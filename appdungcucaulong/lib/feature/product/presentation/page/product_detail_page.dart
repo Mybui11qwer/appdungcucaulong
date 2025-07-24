@@ -44,7 +44,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Padding(
@@ -202,7 +202,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: const DecorationImage(
-                          image: AssetImage('/images/badminton_bg.png'),
+                          image: AssetImage('assets/images/badminton_bg.png'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -313,7 +313,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
           Positioned(
-            top: 30,
+            top: 50,
             left: 16,
             child: GestureDetector(
               onTap: () => Navigator.pop(context),

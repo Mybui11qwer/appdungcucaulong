@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'feature/auth/domain/di/auth_injection.dart';
 import 'feature/cart/domain/di/cart_injection.dart' as cart_di;
 import 'feature/cart/presentation/bloc/cart_bloc.dart';
@@ -11,9 +12,13 @@ import 'feature/product/presentation/bloc/product_event.dart';
 import 'feature/profile/domain/di/profile_injection.dart';
 import 'splash_wrapper.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('accessToken');
+  await prefs.remove('hasSeenIntro');// Xoá token → sẽ không còn login
+  await prefs.remove('customerId');
   // Khởi tạo các DI
   initProfileModule();
   initAuthInjection();

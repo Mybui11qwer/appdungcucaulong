@@ -28,7 +28,7 @@ class EmptyStateWidget extends StatelessWidget {
           Column(
             children: [
               Container(
-                height: 90,
+                height: 120,
                 decoration: const BoxDecoration(
                   color: Color(0xFF1A3C6B),
                   borderRadius: BorderRadius.only(
@@ -51,7 +51,7 @@ class EmptyStateWidget extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: 25,
+            top: 55,
             right: 18,
             child: CircleAvatar(
               backgroundColor: Color.fromARGB(255, 255, 255, 255),

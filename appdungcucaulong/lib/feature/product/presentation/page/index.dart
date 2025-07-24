@@ -42,7 +42,7 @@ class IndexPage extends StatelessWidget {
 
           // Logo + Title
           Positioned(
-            top: 20,
+            top: 50,
             left: 20,
             right: 20,
             child: Column(

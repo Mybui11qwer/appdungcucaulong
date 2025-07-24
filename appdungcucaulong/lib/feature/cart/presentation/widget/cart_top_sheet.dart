@@ -66,7 +66,7 @@ class _CartPanel extends StatelessWidget {
                     itemBuilder: (_, i) {
                       final item = state.items[i];
                       return Container(
-                        margin: EdgeInsets.only(bottom: 16),
+                        margin: EdgeInsets.only(bottom: 16, top: 50),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(20),

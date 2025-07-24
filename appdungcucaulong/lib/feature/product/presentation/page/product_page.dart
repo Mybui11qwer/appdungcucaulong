@@ -51,7 +51,7 @@ class ProductPage extends StatelessWidget {
           bottom: Radius.circular(32),
         ),
       ),
-      padding: const EdgeInsets.only(top: 25, left: 16, right: 16, bottom: 24),
+      padding: const EdgeInsets.only(top: 55, left: 16, right: 16, bottom: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

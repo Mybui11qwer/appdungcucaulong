@@ -9,6 +9,7 @@ import orderRoute from "./routes/order.route";
 import uploadRoutes from "./routes/upload.route"
 import path from 'path';
 import profileRoute from "./routes/profile.route";
+import os from "os";
 
 const app = express();
 const db = new Database();
@@ -36,8 +37,16 @@ const PORT = process.env.PORT || 3000;
 Database.getInstance()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running at http://localhost:${PORT}`);
       console.log(`📚 Swagger docs at http://localhost:${PORT}/api-docs`);
+
+      const interfaces = os.networkInterfaces();
+      Object.keys(interfaces).forEach((interfaceName) => {
+        interfaces[interfaceName]?.forEach((iface) => {
+          if (iface.family === 'IPv4' && !iface.internal) {
+            console.log(`🌐 IP: ${iface.address}`);
+          }
+        });
+      });
     });
   })
   .catch((err: any) => {
