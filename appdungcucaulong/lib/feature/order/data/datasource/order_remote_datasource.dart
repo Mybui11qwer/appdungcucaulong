@@ -73,4 +73,14 @@ class OrderRemoteDatasource {
       throw Exception('Failed to load order details');
     }
   }
+
+  Future<void> cancelOrder(int orderId) async {
+    final response = await http.put(
+      Uri.parse('${ApiConstants.baseUrl}/order/cancel/$orderId'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Hủy đơn hàng thất bại');
+    }
+  }
 }

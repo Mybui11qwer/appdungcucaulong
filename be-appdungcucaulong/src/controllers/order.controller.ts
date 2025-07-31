@@ -21,5 +21,15 @@ export const OrderController = {
     const orderId = Number(req.params.orderId);
     const detail = await OrderService.getOrderDetail(orderId);
     res.json(detail);
+  },
+
+  async cancelOrder(req: Request, res: Response) {
+    try {
+      const orderId = Number(req.params.orderId);
+      await OrderService.cancelOrder(orderId);
+      res.json({ message: 'Đơn hàng đã được hủy thành công' });
+    } catch (err) {
+      res.status(500).json({ message: 'Lỗi khi hủy đơn hàng', error: err });
+    }
   }
 };

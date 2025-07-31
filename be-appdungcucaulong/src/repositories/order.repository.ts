@@ -8,7 +8,7 @@ export const OrderRepository = {
     const result = await pool.request()
       .input('CustomerId', order.customerId)
       .input('Total', order.products.reduce((sum, p) => sum + p.quantity * p.unitPrice, 0))
-      .input('Status', 'Chờ xử lý')
+      .input('Status', 'Processing')
       .input('SaleId', order.saleId ?? null)
       .input('PaymentMethod', order.paymentMethod)
       .input('ShippingAddress', order.shippingAddress)
@@ -54,5 +54,12 @@ export const OrderRepository = {
       .input('OrderId', orderId)
       .query(`SELECT * FROM Detail_Order WHERE ID_Order = @OrderId`);
     return result.recordset;
+  },
+
+  async cancelOrder(orderId: number) {
+    const pool = await Database.getInstance();
+    await pool.request()
+      .input('OrderId', orderId)
+      .query(`UPDATE [Order] SET Status = 'Canceled' WHERE ID_Order = @OrderId`);
   }
 };

@@ -85,4 +85,24 @@ router.get('/customer/:customerId', OrderController.getByCustomer);
  */
 router.get('/:orderId', OrderController.getDetail);
 
+/**
+ * @swagger
+ * /api/order/cancel/{orderId}:
+ *   put:
+ *     summary: Hủy đơn hàng
+ *     tags: [Order]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Đơn hàng đã được hủy thành công
+ *       500:
+ *         description: Lỗi khi hủy đơn hàng
+ */
+router.put('/cancel/:orderId', OrderController.cancelOrder);
+
 export default router;

@@ -15,4 +15,6 @@ abstract class OrderRepository {
   Future<List<OrderEntity>> getOrdersByCustomer(int customerId);
 
   Future<List<OrderItemEntity>> getOrderDetails(int orderId);
+
+  Future<void> cancelOrder(int orderId);
 }

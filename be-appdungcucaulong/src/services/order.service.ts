@@ -15,5 +15,9 @@ export const OrderService = {
   async getOrderDetail(orderId: number) {
     const items = await OrderRepository.getOrderDetails(orderId);
     return items;
+  },
+
+  async cancelOrder(orderId: number) {
+    await OrderRepository.cancelOrder(orderId);
   }
 };

@@ -98,7 +98,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 const SizedBox(width: 8),
                 const Expanded(
                   child: Text(
-                    'Xác nhận đơn hàng',
+                    'Order confirm',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -152,7 +152,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       children: [
                         const Center(
                           child: Text(
-                            'ORDER FORM',
+                            'Order Form',
                             style: TextStyle(
                               color: Color(0xFF103F91),
                               fontSize: 18,
@@ -161,11 +161,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _buildInputField("Tên người nhận", _nameController),
+                        _buildInputField("Receiver", _nameController),
                         const SizedBox(height: 12),
-                        _buildInputField("Địa chỉ giao hàng", _addressController),
+                        _buildInputField("Delivery address", _addressController),
                         const SizedBox(height: 12),
-                        _buildInputField("Ghi chú", _noteController),
+                        _buildInputField("Note", _noteController),
                         const SizedBox(height: 16),
 
                         // Phương thức thanh toán
@@ -212,14 +212,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Tổng tiền: \$${total.toStringAsFixed(2)}',
+                              'Total: \$${total.toStringAsFixed(2)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                             ),
                             Text(
-                              'Sản phẩm: ${widget.cartItems.length}',
+                              'Product: ${widget.cartItems.length}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -244,7 +244,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             child: _isLoading
                                 ? const CircularProgressIndicator(color: Colors.white)
                                 : const Text(
-                              'CHECKOUT',
+                              'Checkout',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

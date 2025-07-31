@@ -37,7 +37,7 @@ class UserProfilePage extends StatelessWidget {
               body: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.only(bottom: 20, top: 60),
                     child: Column(
                       children: [
                         CircleAvatar(
@@ -140,10 +140,40 @@ class UserProfilePage extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF004AAD)),
                           ),
                           const SizedBox(height: 12),
-                          _buildSettingItem(Icons.email, 'Email'),
+                          _buildSettingItem(
+                            Icons.email,
+                            'Email',
+                            children: [
+                              ListTile(
+                                title: Text('Thay đổi email'),
+                                onTap: () {
+                                  // Xử lý logic
+                                },
+                              ),
+                              ListTile(
+                                title: Text('Xác thực email'),
+                                onTap: () {
+                                  // Xử lý logic
+                                },
+                              ),
+                            ],
+                          ),
                           _buildSettingItem(Icons.language, 'Languages'),
                           _buildSettingItem(Icons.brightness_6, 'Theme'),
-                          _buildSettingItem(Icons.system_update, 'Update'),
+                          _buildSettingItem(
+                            Icons.system_update,
+                            'Update',
+                            children: [
+                              ListTile(
+                                title: Text('Tải phiên bản mới'),
+                                onTap: () {},
+                              ),
+                              ListTile(
+                                title: Text('Ghi chú cập nhật'),
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
                           _buildSettingItem(
                             Icons.logout,
                             'Logout',
@@ -200,15 +230,66 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingItem(IconData icon, String title, {VoidCallback? onTap}) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget _buildSettingItem(
+      IconData icon,
+      String title, {
+        List<Widget>? children,
+        VoidCallback? onTap,
+      }) {
+    final isUpdate = title == 'Update';
+
+    return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
-      child: ListTile(
-        leading: Icon(icon),
-        title: Text(title),
-        trailing: const Icon(Icons.keyboard_arrow_down),
-        onTap: onTap,
+      decoration: BoxDecoration(
+        color: isUpdate ? const Color(0xFFFFFFFF) : Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: isUpdate ? Border.all(color: Colors.white) : null,
+      ),
+      child: Theme(
+        data: ThemeData().copyWith(
+          dividerColor: Colors.transparent,
+          iconTheme: IconThemeData(color: isUpdate ? Colors.black : Colors.black),
+          textTheme: TextTheme(
+            titleMedium: TextStyle(
+              color: isUpdate ? Colors.black : Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        child: ExpansionTile(
+          leading: Icon(icon, color: isUpdate ? Colors.black : Colors.black),
+          title: Text(title),
+          trailing: Icon(
+            Icons.keyboard_arrow_down,
+            color: isUpdate ? Colors.black : Colors.black,
+          ),
+          children: isUpdate
+              ? (children ?? []).map((child) {
+            return Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Theme(
+                data: ThemeData.dark().copyWith(
+                  textTheme: const TextTheme(
+                    bodyMedium: TextStyle(color: Colors.black),
+                  ),
+                  iconTheme: const IconThemeData(color: Colors.white),
+                  listTileTheme: const ListTileThemeData(
+                    iconColor: Colors.black,
+                    textColor: Colors.black,
+                  ),
+                ),
+                child: child,
+              ),
+            );
+          }).toList()
+              : (children ?? []),
+          onExpansionChanged: (expanded) {
+            if (expanded && onTap != null) onTap();
+          },
+        ),
       ),
     );
   }

@@ -485,6 +485,7 @@ class ProductCard extends StatelessWidget {
 }
 
 class _InfoCard extends StatelessWidget {
+  // ignore: unused_element_parameter
   const _InfoCard({super.key});
 
   @override
@@ -582,6 +583,7 @@ class _TagChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
+        // ignore: deprecated_member_use
         color: Colors.white.withOpacity(0.3),
         borderRadius: BorderRadius.circular(20),
       ),

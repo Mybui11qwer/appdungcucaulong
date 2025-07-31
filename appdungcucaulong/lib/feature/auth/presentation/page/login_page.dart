@@ -14,6 +14,7 @@ import 'register_page.dart';
 class LoginPage extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   LoginPage({super.key});
 
@@ -31,7 +32,7 @@ class LoginPage extends StatelessWidget {
               ).showSnackBar(SnackBar(content: Text('❌ ${state.message}')));
             } else if (state is LoginSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('✅ Đăng nhập thành công')),
+                const SnackBar(content: Text('✅ Hello, to Badminton Store')),
               );
               //final customerId = state.user.customerId;
 
@@ -48,111 +49,130 @@ class LoginPage extends StatelessWidget {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: ListView(
-              children: [
-                const SizedBox(height: 60),
-                Image.asset(
-                  'assets/images/badminton_mascot.png',
-                  height: 150,
-                ),
-                const SizedBox(height: 30),
-                buildTextField(
-                  controller: emailController,
-                  hintText: "E-mail",
-                  icon: Icons.email_outlined,
-                  obscureText: false,
-                ),
-                const SizedBox(height: 16),
-                buildTextField(
-                  controller: passwordController,
-                  hintText: "Password",
-                  icon: Icons.lock_outline,
-                  obscureText: true,
-                ),
-                const SizedBox(height: 24),
-                BlocBuilder<LoginBloc, LoginState>(
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      onPressed: state is LoginLoading
-                          ? null
-                          : () {
-                              final email = emailController.text.trim();
-                              final password = passwordController.text.trim();
-                              context.read<LoginBloc>().add(
-                                    LoginSubmitted(email, password),
-                                  );
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+            child: Form(
+              key: formKey,
+              child: ListView(
+                children: [
+                  const SizedBox(height: 60),
+                  Image.asset(
+                    'assets/images/badminton_mascot.png',
+                    height: 150,
+                  ),
+                  const SizedBox(height: 30),
+                  buildTextField(
+                    controller: emailController,
+                    hintText: "E-mail",
+                    icon: Icons.email_outlined,
+                    obscureText: false,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Email cannot be empty';
+                      } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return 'Invalid email format';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  buildTextField(
+                    controller: passwordController,
+                    hintText: "Password",
+                    icon: Icons.lock_outline,
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password cannot be empty';
+                      } else if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state) {
+                      return ElevatedButton(
+                        onPressed: state is LoginLoading
+                            ? null
+                            : () {
+                          if (formKey.currentState!.validate()) {
+                            final email = emailController.text.trim();
+                            final password = passwordController.text.trim();
+                            context.read<LoginBloc>().add(LoginSubmitted(email, password));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: state is LoginLoading
+                            ? const CircularProgressIndicator(
+                          color: Color(0xFF003C8F),
+                        )
+                            : const Text(
+                          "SIGN IN",
+                          style: TextStyle(
+                            color: Color(0xFF003C8F),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: const [
+                      Expanded(child: Divider(color: Colors.white)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          "Or continue with",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
-                      child: state is LoginLoading
-                          ? const CircularProgressIndicator(
-                              color: Color(0xFF003C8F),
-                            )
-                          : const Text(
-                              "SIGN IN",
+                      Expanded(child: Divider(color: Colors.white)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      socialButton(FontAwesomeIcons.apple, () {}),
+                      socialButton(FontAwesomeIcons.google, () {}),
+                      socialButton(FontAwesomeIcons.facebookF, () {}),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (_) => RegisterPage()));
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(color: Colors.white),
+                          children: [
+                            TextSpan(
+                              text: "Register",
                               style: TextStyle(
-                                color: Color(0xFF003C8F),
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
                               ),
                             ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: const [
-                    Expanded(child: Divider(color: Colors.white)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        "Or continue with",
-                        style: TextStyle(color: Colors.white),
+                          ],
+                        ),
                       ),
                     ),
-                    Expanded(child: Divider(color: Colors.white)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    socialButton(FontAwesomeIcons.apple, () {}),
-                    socialButton(FontAwesomeIcons.google, () {}),
-                    socialButton(FontAwesomeIcons.facebookF, () {}),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(
-                        context,
-                      ).push(MaterialPageRoute(builder: (_) => RegisterPage()));
-                    },
-                    child: RichText(
-                      text: TextSpan(
-                        text: "Don't have an account? ",
-                        style: TextStyle(color: Colors.white),
-                        children: [
-                          TextSpan(
-                            text: "Register",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -165,11 +185,13 @@ class LoginPage extends StatelessWidget {
     required String hintText,
     required IconData icon,
     required bool obscureText,
+    String? Function(String?)? validator,
   }) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       obscureText: obscureText,
       style: const TextStyle(color: Colors.white),
+      validator: validator,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.white70),
@@ -184,6 +206,7 @@ class LoginPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(color: Colors.white),
         ),
+        errorStyle: const TextStyle(color: Colors.yellowAccent),
       ),
     );
   }
