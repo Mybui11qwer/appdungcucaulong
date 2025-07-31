@@ -30,19 +30,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     _selectedIndex = widget.currentIndex;
   }
 
-  void _navigateWithFade(BuildContext context, Widget page) {
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        pageBuilder: (_, __, ___) => page,
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        transitionDuration: const Duration(milliseconds: 1000),
-      ),
-    );
-  }
-
   void _onTap(int index) {
     if (_selectedIndex == index) return;
 
@@ -50,28 +37,37 @@ class _MainScaffoldState extends State<MainScaffold> {
       _selectedIndex = index;
     });
 
+    Widget page;
     switch (index) {
       case 0:
-        _navigateWithFade(context, const IndexPage());
+        page = const IndexPage();
         break;
       case 1:
-        _navigateWithFade(context, const NotificationsPage());
+        page = const NotificationsPage();
         break;
       case 2:
-        _navigateWithFade(context, const FavoritesPage());
+        page = const FavoritesPage();
         break;
       case 3:
-        _navigateWithFade(context, const ProductPage());
+        page = const ProductPage();
         break;
       case 4:
-        _navigateWithFade(context, const UserProfilePage());
+        page = const UserProfilePage();
         break;
+      default:
+        return;
     }
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: widget.body,
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,

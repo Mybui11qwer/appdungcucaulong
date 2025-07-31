@@ -290,7 +290,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               color: Color(0xFF3A7BD5),
               alignment: Alignment.center,
               child: Image.network(
-                '${ApiConstants.baseUrl}/public/images/lening.png',
+                '${ApiConstants.baseUrl}/public/images/${widget.product.image}',
                 height: 200,
               ),
             ),

@@ -83,177 +83,184 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF103F91),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header: Arrow back + Tiêu đề
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 12,
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
+      body: Column(
+        children: [
+          // Header: Arrow back + Tiêu đề
+          Padding(
+            padding: const EdgeInsets.only(top: 50),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
                     'Xác nhận đơn hàng',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            // Danh sách sản phẩm
-            Expanded(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
-                  children:[
-                    ...widget.cartItems.map((item) => _buildCartItem(item, context)).toList(),
+              ],
+            ),
+          ),
 
-                    const SizedBox(height: 20),
+          const SizedBox(height: 30),
 
-                    // 📋 ORDER FORM
-                    Container(
-                      margin: const EdgeInsets.only(top: 24, bottom: 24),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Center(
-                            child: Text(
-                              'ORDER FORM',
+          // Danh sách sản phẩm
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                      children: [
+                        ...widget.cartItems
+                            .map((item) => _buildCartItem(item, context))
+                            .toList(),
+
+                        const SizedBox(height: 20),
+                      ],
+
+                    ),
+                  ),
+
+                  // 📋 ORDER FORM
+                  Container(
+                    margin: const EdgeInsets.only(top: 24, bottom: 60, left: 20, right: 20),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Center(
+                          child: Text(
+                            'ORDER FORM',
+                            style: TextStyle(
+                              color: Color(0xFF103F91),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _buildInputField("Tên người nhận", _nameController),
+                        const SizedBox(height: 12),
+                        _buildInputField("Địa chỉ giao hàng", _addressController),
+                        const SizedBox(height: 12),
+                        _buildInputField("Ghi chú", _noteController),
+                        const SizedBox(height: 16),
+
+                        // Phương thức thanh toán
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Radio<String>(
+                                    value: 'Momo',
+                                    groupValue: _paymentMethod,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _paymentMethod = value!;
+                                      });
+                                    },
+                                  ),
+                                  const Text('Momo'),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Radio<String>(
+                                    value: 'COD',
+                                    groupValue: _paymentMethod,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _paymentMethod = value!;
+                                      });
+                                    },
+                                  ),
+                                  const Text('COD'),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+
+                        // Tổng tiền & sản phẩm
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Tổng tiền: \$${total.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              'Sản phẩm: ${widget.cartItems.length}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Nút CHECKOUT
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _checkout,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF103F91),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(color: Colors.white)
+                                : const Text(
+                              'CHECKOUT',
                               style: TextStyle(
-                                color: Color(0xFF103F91),
-                                fontSize: 18,
+                                color: Colors.white,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          _buildInputField("Tên người nhận", _nameController),
-                          const SizedBox(height: 12),
-                          _buildInputField("Địa chỉ giao hàng", _addressController),
-                          const SizedBox(height: 12),
-                          _buildInputField("Ghi chú", _noteController),
-                          const SizedBox(height: 16),
-
-                          // Phương thức thanh toán
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: 'Momo',
-                                      groupValue: _paymentMethod,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _paymentMethod = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('Momo'),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Radio<String>(
-                                      value: 'COD',
-                                      groupValue: _paymentMethod,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _paymentMethod = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text('COD'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-
-                          // Tổng tiền & sản phẩm
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Tổng tiền: \$${total.toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Text(
-                                'Sản phẩm: ${widget.cartItems.length}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Nút CHECKOUT
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _isLoading ? null : _checkout,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF103F91),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: _isLoading
-                                  ? const CircularProgressIndicator(color: Colors.white)
-                                  : const Text(
-                                'CHECKOUT',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ]
-                ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -278,19 +285,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
 }
 
 Widget _buildCartItem(CartItemEntity item, BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 16.0),
+  return Container(
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    decoration: BoxDecoration(
+      color: const Color(0xFF103F91), // Màu nền container cha
+      borderRadius: BorderRadius.circular(18), // Bo góc cho toàn khối
+    ),
     child: Row(
       children: [
         // thông tin sản phẩm
         Container(
-          width: MediaQuery.of(context).size.width - 100,
+          width: MediaQuery.of(context).size.width - 85,
           height: 80,
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(15),
               bottomLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+              bottomRight: Radius.circular(15),
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -336,13 +349,6 @@ Widget _buildCartItem(CartItemEntity item, BuildContext context) {
         Container(
           width: 50,
           height: 80,
-          decoration: const BoxDecoration(
-            color: Color(0xFF103F91),
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(15),
-              bottomRight: Radius.circular(15),
-            ),
-          ),
           alignment: Alignment.center,
           child: Text(
             item.quantity.toString(),
@@ -357,4 +363,3 @@ Widget _buildCartItem(CartItemEntity item, BuildContext context) {
     ),
   );
 }
-

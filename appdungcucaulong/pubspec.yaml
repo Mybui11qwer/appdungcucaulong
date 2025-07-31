@@ -73,6 +73,26 @@ flutter:
     - assets/images/banner.png
     - assets/images/badminton_bg.png
     - assets/images/yonex.png
+    - assets/images/Images1.png
+    - assets/images/Images2.png
+    - assets/images/Images3.png
+    - assets/images/Images4.png
+    - assets/images/shuttecock/Images5.png
+    - assets/images/shuttecock/Images6.png
+    - assets/images/shuttecock/Images7.png
+    - assets/images/racket/racket1.png
+    - assets/images/racket/racket2.png
+    - assets/images/sneaker/sneaker1.png
+    - assets/images/sneaker/sneaker2.png
+    - assets/images/cloth/cloth1.png
+    - assets/images/cloth/cloth2.png
+    - assets/images/cloth/cloth3.png
+    - assets/images/indexicon/aoicon.png
+    - assets/images/indexicon/giayicon.png
+    - assets/images/indexicon/Intersect.png
+    - assets/images/indexicon/voticon.png
+    - assets/images/badminton_yard_section.png
+    - assets/images/midle_bg.png
     - assets/introImages/intro1.png
     - assets/introImages/intro2.png
     - assets/introImages/intro3.png
