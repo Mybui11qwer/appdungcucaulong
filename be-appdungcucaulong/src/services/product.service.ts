@@ -17,4 +17,16 @@ export class ProductService {
   async getProductDetail(id: number): Promise<any> {
     return this.productRepository.getById(id);
   }
+
+  async createProduct(data: Omit<Product, 'ID_Product'>): Promise<Product> {
+    return this.productRepository.create(data);
+  }
+
+  async updateProduct(id: number, data: Partial<Product>): Promise<boolean> {
+    return this.productRepository.update(id, data);
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    return this.productRepository.delete(id);
+  }
 }
