@@ -105,4 +105,62 @@ router.get('/:orderId', OrderController.getDetail);
  */
 router.put('/cancel/:orderId', OrderController.cancelOrder);
 
+/**
+ * @swagger
+ * /api/order/all:
+ *   get:
+ *     summary: Lấy tất cả đơn hàng
+ *     tags: [Order]
+ *     responses:
+ *       200:
+ *         description: Danh sách tất cả đơn hàng
+ */
+router.get('/all', OrderController.getAll);
+
+/**
+ * @swagger
+ * /api/order/update-status/{orderId}:
+ *   put:
+ *     summary: Cập nhật trạng thái đơn hàng
+ *     tags: [Order]
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Trạng thái đơn hàng đã được cập nhật
+ */
+router.put('/update-status/:orderId', OrderController.updateStatus);
+
+/**
+ * @swagger
+ * /api/order/detail/customer/{customerId}:
+ *   get:
+ *     summary: Lấy chi tiết đơn hàng theo mã khách hàng
+ *     tags: [Order]
+ *     parameters:
+ *       - in: path
+ *         name: customerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Chi tiết đơn hàng theo khách hàng
+ */
+router.get('/detail/customer/:customerId', OrderController.getDetailByCustomer);
+
+
 export default router;

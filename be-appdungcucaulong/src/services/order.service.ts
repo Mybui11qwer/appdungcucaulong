@@ -16,6 +16,18 @@ export const OrderService = {
     const items = await OrderRepository.getOrderDetails(orderId);
     return items;
   },
+  // order.service.ts
+  async updateStatus(orderId: number, status: string) {
+    await OrderRepository.updateOrderStatus(orderId, status);
+  },
+
+  async getAllOrders() {
+    return await OrderRepository.getAllOrders();
+  },
+
+  async getOrderDetailByCustomer(customerId: number) {
+    return await OrderRepository.getOrderDetailsByCustomer(customerId);
+  },
 
   async cancelOrder(orderId: number) {
     await OrderRepository.cancelOrder(orderId);

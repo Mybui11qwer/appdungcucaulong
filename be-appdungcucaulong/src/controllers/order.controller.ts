@@ -23,6 +23,29 @@ export const OrderController = {
     res.json(detail);
   },
 
+  // order.controller.ts
+  async updateStatus(req: Request, res: Response) {
+    try {
+      const orderId = Number(req.params.orderId);
+      const { status } = req.body;
+      await OrderService.updateStatus(orderId, status);
+      res.json({ message: 'Cập nhật trạng thái đơn hàng thành công' });
+    } catch (err) {
+      res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái', error: err });
+    }
+  },
+
+  async getAll(req: Request, res: Response) {
+    const orders = await OrderService.getAllOrders();
+    res.json(orders);
+  },
+
+  async getDetailByCustomer(req: Request, res: Response) {
+    const customerId = Number(req.params.customerId);
+    const detail = await OrderService.getOrderDetailByCustomer(customerId);
+    res.json(detail);
+  },
+
   async cancelOrder(req: Request, res: Response) {
     try {
       const orderId = Number(req.params.orderId);

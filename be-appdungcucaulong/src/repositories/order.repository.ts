@@ -56,6 +56,36 @@ export const OrderRepository = {
     return result.recordset;
   },
 
+  // order.repository.ts
+  async updateOrderStatus(orderId: number, status: string) {
+    const pool = await Database.getInstance();
+    await pool.request()
+      .input('OrderId', orderId)
+      .input('Status', status)
+      .query(`UPDATE [Order] SET Status = @Status WHERE ID_Order = @OrderId`);
+  },
+
+  async getAllOrders() {
+    const pool = await Database.getInstance();
+    const result = await pool.request()
+      .query(`SELECT * FROM [Order] ORDER BY Order_Date DESC`);
+    return result.recordset;
+  },
+
+  async getOrderDetailsByCustomer(customerId: number) {
+    const pool = await Database.getInstance();
+    const result = await pool.request()
+      .input('CustomerId', customerId)
+      .query(`
+      SELECT o.*, d.ID_Product, d.ID_Size, d.Quantity, d.Unit_Price
+      FROM [Order] o
+      JOIN Detail_Order d ON o.ID_Order = d.ID_Order
+      WHERE o.ID_Customer = @CustomerId
+      ORDER BY o.Order_Date DESC
+    `);
+    return result.recordset;
+  },
+
   async cancelOrder(orderId: number) {
     const pool = await Database.getInstance();
     await pool.request()

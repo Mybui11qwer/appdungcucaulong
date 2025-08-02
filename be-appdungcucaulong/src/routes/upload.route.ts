@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { uploadImage } from '../controllers/upload.controller';
 import { upload } from '../middlewares/upload.middleware';
+import fs from 'fs';
+import path from 'path';
+import { Request, Response } from 'express';
 
 const router = Router();
 
@@ -40,5 +43,21 @@ const router = Router();
  *         description: Không có file được gửi
  */
 router.post('/image', upload.single('image'), uploadImage);
+
+router.get('/images', (req: Request, res: Response) => {
+  const dirPath = path.join(__dirname, '../../public/images');
+
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      return res.status(500).json({ message: 'Lỗi đọc thư mục ảnh', error: err.message });
+    }
+
+    const imageUrls = files.map(filename => {
+      return `${req.protocol}://${req.get('host')}/uploads/images/${filename}`;
+    });
+
+    res.status(200).json({ images: imageUrls });
+  });
+});
 
 export default router;

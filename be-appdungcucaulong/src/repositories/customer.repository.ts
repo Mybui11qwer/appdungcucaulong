@@ -24,3 +24,21 @@ export const getCustomerById = async (id: number): Promise<Customer | null> => {
 
   return result.recordset[0] || null;
 };
+
+// src/repositories/customer.repository.ts
+export const getAllCustomers = async (): Promise<Customer[]> => {
+  const pool = await Database.getInstance();
+  const result = await pool.request().query(`
+    SELECT
+      ID_Customer as id,
+      Username as username,
+      Email as email,
+      Phone as phone,
+      Address as address,
+      Gender as gender,
+      Avatar as avatar,
+      Role as role
+    FROM Customer
+  `);
+  return result.recordset;
+};

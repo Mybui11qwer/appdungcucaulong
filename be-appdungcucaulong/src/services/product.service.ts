@@ -18,15 +18,15 @@ export class ProductService {
     return this.productRepository.getById(id);
   }
 
-  async createProduct(data: Omit<Product, 'ID_Product'>): Promise<Product> {
-    return this.productRepository.create(data);
+  async createProduct(product: Product): Promise<void> {
+    await this.productRepository.create(product);
   }
 
-  async updateProduct(id: number, data: Partial<Product>): Promise<boolean> {
-    return this.productRepository.update(id, data);
+  async updateProduct(id: number, product: Product): Promise<void> {
+    await this.productRepository.update(id, product);
   }
 
-  async deleteProduct(id: number): Promise<boolean> {
-    return this.productRepository.delete(id);
+  async deleteProduct(id: number): Promise<void> {
+    await this.productRepository.delete(id);
   }
 }

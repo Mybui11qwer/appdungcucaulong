@@ -67,26 +67,30 @@ router.get("/:id", productController.getDetail);
  * @swagger
  * /api/products:
  *   post:
- *     summary: Thêm sản phẩm mới
+ *     summary: Tạo sản phẩm mới
  *     tags: [Product]
- *     consumes:
- *       - multipart/form-data
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             required:
+ *               - ID_Category
+ *               - ID_Warranty
+ *               - ID_Material
  *               - Name
  *               - Price
  *               - Quantity
  *               - Description
- *               - ID_Category
- *               - ID_Warranty
- *               - ID_Material
  *               - Image
  *             properties:
+ *               ID_Category:
+ *                 type: integer
+ *               ID_Warranty:
+ *                 type: integer
+ *               ID_Material:
+ *                 type: integer
  *               Name:
  *                 type: string
  *               Price:
@@ -95,22 +99,16 @@ router.get("/:id", productController.getDetail);
  *                 type: integer
  *               Description:
  *                 type: string
- *               ID_Category:
- *                 type: integer
- *               ID_Warranty:
- *                 type: integer
- *               ID_Material:
- *                 type: integer
  *               Image:
  *                 type: string
- *                 format: binary
+ *                 example: "aoyonex.png"
  *     responses:
  *       201:
- *         description: Sản phẩm được tạo thành công
- *       400:
- *         description: Dữ liệu không hợp lệ
+ *         description: Tạo sản phẩm thành công
+ *       500:
+ *         description: Lỗi server
  */
-router.post("/", upload.single("Image"), productController.create);
+router.post("/", productController.create);
 
 /**
  * @swagger
@@ -118,22 +116,35 @@ router.post("/", upload.single("Image"), productController.create);
  *   put:
  *     summary: Cập nhật sản phẩm theo ID
  *     tags: [Product]
- *     consumes:
- *       - multipart/form-data
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID sản phẩm
+ *         description: ID của sản phẩm
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - ID_Category
+ *               - ID_Warranty
+ *               - ID_Material
+ *               - Name
+ *               - Price
+ *               - Quantity
+ *               - Description
+ *               - Image
  *             properties:
+ *               ID_Category:
+ *                 type: integer
+ *               ID_Warranty:
+ *                 type: integer
+ *               ID_Material:
+ *                 type: integer
  *               Name:
  *                 type: string
  *               Price:
@@ -142,24 +153,18 @@ router.post("/", upload.single("Image"), productController.create);
  *                 type: integer
  *               Description:
  *                 type: string
- *               ID_Category:
- *                 type: integer
- *               ID_Warranty:
- *                 type: integer
- *               ID_Material:
- *                 type: integer
  *               Image:
  *                 type: string
- *                 format: binary
+ *                 example: "aoyonex.png"
  *     responses:
  *       200:
- *         description: Sản phẩm đã được cập nhật
+ *         description: Cập nhật thành công
  *       400:
- *         description: Dữ liệu không hợp lệ
- *       404:
- *         description: Không tìm thấy sản phẩm
+ *         description: ID không hợp lệ
+ *       500:
+ *         description: Lỗi server
  */
-router.put("/:id", upload.single("Image"), productController.update);
+router.put("/:id", productController.update);
 
 /**
  * @swagger
@@ -173,12 +178,14 @@ router.put("/:id", upload.single("Image"), productController.update);
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID sản phẩm
+ *         description: ID của sản phẩm cần xoá
  *     responses:
  *       200:
- *         description: Đã xoá sản phẩm
- *       404:
- *         description: Không tìm thấy sản phẩm
+ *         description: Xoá thành công
+ *       400:
+ *         description: ID không hợp lệ
+ *       500:
+ *         description: Lỗi server
  */
 router.delete("/:id", productController.delete);
 

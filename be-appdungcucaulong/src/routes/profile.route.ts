@@ -1,6 +1,6 @@
 // src/routes/profile.route.ts
 import { Router } from 'express';
-import { getProfileController } from '../controllers/profile.controller';
+import { getAllCustomersController, getProfileController } from '../controllers/profile.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
 
 const router = Router();
@@ -54,5 +54,28 @@ const router = Router();
  *         description: Lỗi máy chủ
  */
 router.get('/profile', verifyToken, getProfileController);
+
+/**
+ * @swagger
+ * /api/user/customers:
+ *   get:
+ *     summary: Lấy danh sách toàn bộ người dùng
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Trả về danh sách người dùng
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Lỗi server
+ */
+router.get('/customers', getAllCustomersController);
 
 export default router;

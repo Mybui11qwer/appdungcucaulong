@@ -6,7 +6,7 @@ export const uploadImage = (req: Request, res: Response, next: Function): void =
     return;
   }
 
-  const imageUrl = `${req.protocol}://${req.get('host')}/uploads/images/${req.file.filename}`;
+  const imageUrl = `${req.protocol}://${req.get('host')}/public/images/${req.file.filename}`;
 
   res.status(200).json({
     message: 'Upload thành công',

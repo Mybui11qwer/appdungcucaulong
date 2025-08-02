@@ -36,48 +36,53 @@ export class ProductRepository {
     return result.recordset[0];
   }
   // các hàm CRUD
-
-  async create(data: Omit<Product, 'ID_Product'>): Promise<Product> {
+  async create(product: Product): Promise<void> {
     const pool = await Database.getInstance();
-    const result = await pool.request()
-      .input("Name", sql.NVarChar, data.Name)
-      .input("Price", sql.Money, data.Price)
-      .input("Quantity", sql.Int, data.Quantity)
-      .input("Description", sql.NVarChar, data.Description)
-      .input("Image", sql.NVarChar, data.Image)
-      .input("ID_Category", sql.Int, data.ID_Category)
-      .input("ID_Warranty", sql.Int, data.ID_Warranty)
-      .input("ID_Material", sql.Int, data.ID_Material)
+    await pool.request()
+      .input("ID_Category", sql.Int, product.ID_Category)
+      .input("ID_Warranty", sql.Int, product.ID_Warranty)
+      .input("ID_Material", sql.Int, product.ID_Material)
+      .input("Name", sql.NVarChar, product.Name)
+      .input("Price", sql.Float, product.Price)
+      .input("Quantity", sql.Int, product.Quantity)
+      .input("Description", sql.NVarChar, product.Description)
+      .input("Image", sql.NVarChar, product.Image)
       .query(`
-      INSERT INTO Product (Name, Price, Quantity, Description, Image, ID_Category, ID_Warranty, ID_Material)
-      OUTPUT inserted.*
-      VALUES (@Name, @Price, @Quantity, @Description, @Image, @ID_Category, @ID_Warranty, @ID_Material)
+      INSERT INTO Product (ID_Category, ID_Warranty, ID_Material, Name, Price, Quantity, Description, Image)
+      VALUES (@ID_Category, @ID_Warranty, @ID_Material, @Name, @Price, @Quantity, @Description, @Image)
     `);
-    return result.recordset[0];
   }
 
-  async update(id: number, data: Partial<Product>): Promise<boolean> {
+  async update(id: number, product: Product): Promise<void> {
     const pool = await Database.getInstance();
-    const sets = [];
-    const request = pool.request().input("ID", sql.Int, id);
-
-    for (const [key, value] of Object.entries(data)) {
-      sets.push(`${key} = @${key}`);
-      request.input(key, typeof value === 'number' ? sql.Int : sql.NVarChar, value);
-    }
-
-    const result = await request.query(`
-    UPDATE Product SET ${sets.join(", ")} WHERE ID_Product = @ID
-  `);
-
-    return result.rowsAffected[0] > 0;
+    await pool.request()
+      .input("id", sql.Int, id)
+      .input("ID_Category", sql.Int, product.ID_Category)
+      .input("ID_Warranty", sql.Int, product.ID_Warranty)
+      .input("ID_Material", sql.Int, product.ID_Material)
+      .input("Name", sql.NVarChar, product.Name)
+      .input("Price", sql.Float, product.Price)
+      .input("Quantity", sql.Int, product.Quantity)
+      .input("Description", sql.NVarChar, product.Description)
+      .input("Image", sql.NVarChar, product.Image)
+      .query(`
+      UPDATE Product
+      SET ID_Category = @ID_Category,
+          ID_Warranty = @ID_Warranty,
+          ID_Material = @ID_Material,
+          Name = @Name,
+          Price = @Price,
+          Quantity = @Quantity,
+          Description = @Description,
+          Image = @Image
+      WHERE ID_Product = @id
+    `);
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<void> {
     const pool = await Database.getInstance();
-    const result = await pool.request()
-      .input("ID", sql.Int, id)
-      .query(`DELETE FROM Product WHERE ID_Product = @ID`);
-    return result.rowsAffected[0] > 0;
+    await pool.request()
+      .input("id", sql.Int, id)
+      .query(`DELETE FROM Product WHERE ID_Product = @id`);
   }
 }
