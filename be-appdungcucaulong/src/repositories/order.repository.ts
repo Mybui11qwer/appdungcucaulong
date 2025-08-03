@@ -68,7 +68,7 @@ export const OrderRepository = {
   async getAllOrders() {
     const pool = await Database.getInstance();
     const result = await pool.request()
-      .query(`SELECT * FROM [Order] ORDER BY Order_Date DESC`);
+      .query(`SELECT * FROM [Order]`);
     return result.recordset;
   },
 
